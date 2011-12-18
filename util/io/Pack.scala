@@ -15,7 +15,7 @@ object Pack
 		val packer = Pack200.newPacker
 		import collection.JavaConversions._
 		packer.properties ++= options
-		 
+
 		Using.jarFile(false)(jarPath) { f =>
 			Using.fileOutputStream()(out) { stream =>
 				packer.pack(f, stream)
@@ -52,9 +52,9 @@ object SignJar
 	def providerName(p: String) = new SignOption("-providerName" :: p :: Nil, false)
 	def storePassword(p: String) = new SignOption("-storepass" :: p :: Nil, true)
 	def keyPassword(p: String) = new SignOption("-keypass" :: p :: Nil, true)
-	
+
 	private def VerifyOption = "-verify"
-	
+
 	/** Uses jarsigner to sign the given jar.  */
 	def sign(jarPath: File, alias: String, options: Seq[SignOption])(fork: (String, List[String]) => Int)
 	{
@@ -74,6 +74,6 @@ object SignJar
 		if(exitCode != 0)
 			error("Error " + action + " jar (exit code was " + exitCode + ".)")
 	}
-	
+
 	private val CommandName = "jarsigner"
 }

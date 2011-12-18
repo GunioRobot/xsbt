@@ -1,7 +1,7 @@
 import org.specs._
 
 class B extends Specification
-{	
+{
   "'hello world' has 11 characters" in {
      "hello world".size must be equalTo(122)
   }

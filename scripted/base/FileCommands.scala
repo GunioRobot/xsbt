@@ -10,7 +10,7 @@ package xsbt.test
 class FileCommands(baseDirectory: File) extends BasicStatementHandler
 {
 	lazy val commands = commandMap
-	def commandMap = 
+	def commandMap =
 		Map(
 			"touch" nonEmpty touch _,
 			"delete" nonEmpty delete _,
@@ -29,7 +29,7 @@ class FileCommands(baseDirectory: File) extends BasicStatementHandler
 
 	def apply(command: String, arguments: List[String]): Unit =
 		commands.get(command).map( _(arguments) ).getOrElse(scriptError("Unknown command " + command))
-	
+
 	def scriptError(message: String): Some[String] = error("Test script error: " + message)
 	def spaced[T](l: Seq[T]) = l.mkString(" ")
 	def fromStrings(paths: List[String]) = paths.map(fromString)

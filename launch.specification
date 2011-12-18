@@ -49,7 +49,7 @@ configuration ::= scala app repositories boot log app-properties
     promptCreate ::= 'prompt-create'  ':'  label
     promptFill ::= 'prompt-fill'  ':'  boolean
     quickOption ::= 'quick-option'  ':'  boolean
- 
+
     version ::= 'version' ':' versionSpecification
       versionSpecification ::= readProperty | fixedVersion
         readProperty ::= 'read'  '(' propertyName ')'  '[' default ']'

@@ -54,7 +54,7 @@ object DotGraph
 			("digraph " + graphName + " {") +:
 			mappings :+
 			"}"
-			
+
 		IO.writeLines(file, lines)
 	}
 	def sourceToString(roots: Iterable[File], source: File) =

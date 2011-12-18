@@ -31,7 +31,7 @@ object Boot
 		catch
 		{
 			case b: BootException => errorAndExit(b.toString)
-			case r: xsbti.RetrieveException => errorAndExit("Error: " + r.getMessage) 
+			case r: xsbti.RetrieveException => errorAndExit("Error: " + r.getMessage)
 			case r: xsbti.FullReload => Some(r.arguments)
 			case e =>
 				e.printStackTrace
@@ -43,6 +43,6 @@ object Boot
 		System.out.println(msg)
 		exit(1)
 	}
-	private def exit(code: Int): Nothing = 
+	private def exit(code: Int): Nothing =
 		System.exit(code).asInstanceOf[Nothing]
 }

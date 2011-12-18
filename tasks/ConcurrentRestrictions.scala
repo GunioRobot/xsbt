@@ -11,7 +11,7 @@ trait ConcurrentRestrictions[A]
 
 	/** Representation of zero tasks.*/
 	def empty: G
-	
+
 	/** Updates the description `g` to include a new task `a`.*/
 	def add(g: G, a: A): G
 
@@ -143,7 +143,7 @@ object ConcurrentRestrictions
 					// if the new task is allowed to run concurrently with the currently running tasks,
 					//   submit it to be run by the backing j.u.c.CompletionService
 				if(tags valid newState)
-				{ 
+				{
 					tagState = newState
 					submitValid( node, work )
 				}

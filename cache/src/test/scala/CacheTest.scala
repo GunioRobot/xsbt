@@ -16,7 +16,7 @@ object CacheTest// extends Properties("Cache test")
 	{
 		lazy val create = new File("test")
 
-		val length = cached(lengthCache) { 
+		val length = cached(lengthCache) {
 			(f: File) => { println("File length: " + f.length); f.length }
 		}
 

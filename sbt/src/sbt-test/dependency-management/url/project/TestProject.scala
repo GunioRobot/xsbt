@@ -10,7 +10,7 @@ object TestProject extends Build
 		TaskKey[Unit]("check-in-test") <<= checkClasspath(Test),
 		TaskKey[Unit]("check-in-compile") <<= checkClasspath(Compile)
 	)
-		
+
 	private def checkClasspath(conf: Configuration) =
 		fullClasspath in conf map { cp =>
 			try

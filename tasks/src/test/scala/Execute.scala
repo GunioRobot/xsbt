@@ -23,7 +23,7 @@ object ExecuteSpec extends Properties("Execute")
 			checkResult(result, i)
 		}
 	}*/
-	
+
 	property("evaluates simple mapped task") = forAll(iGen, MaxTasksGen, MaxWorkersGen) { (i: Int, times: Int, workers: Int) =>
 		("Workers: " + workers) |: ("Value: " + i) |: ("Times: " + times) |:
 		{

@@ -36,7 +36,7 @@ object WriteContentSpecification extends Properties("Write content")
 
 	// make the test independent of underlying platform and allow any unicode character in Strings to be encoded
 	val charset = IO.utf8
-		
+
 	import IO._
 	private def writeAndCheckString(s: String) =
 		withTemporaryFile { file =>
@@ -72,7 +72,7 @@ object WriteContentSpecification extends Properties("Write content")
 			append(file, b)
 			readBytes(file) sameElements (a++b)
 		}
-	
+
 	private def withTemporaryFile[T](f: File => T): T =
 		withTemporaryDirectory { dir => f(new java.io.File(dir, "out")) }
 }

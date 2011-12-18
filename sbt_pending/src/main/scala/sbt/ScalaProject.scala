@@ -136,7 +136,7 @@ trait MultiTaskProject extends Project
 				}
 				(test: String) => includeTestsSet.contains(test) || testFilters.exists(_.accept(test))
 			}
-			
+
 			val includeFunction =
 				if(testNames.isEmpty)
 					(test: String) => true

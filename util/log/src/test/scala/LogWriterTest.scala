@@ -26,7 +26,7 @@ object LogWriterTest extends Properties("Log Writer")
 		 ("Recorded:\n" + events.map(show).mkString("\n")) |:
 			check( toLines(lines), events, level)
 	}
-	
+
 	/** Displays a LogEvent in a useful format for debugging.  In particular, we are only interested in `Log` types
 	* and non-printable characters should be escaped*/
 	def show(event: LogEvent): String =
@@ -51,7 +51,7 @@ object LogWriterTest extends Properties("Log Writer")
 		}
 		writer.flush()
 	}
-	
+
 	/** Converts the given lines in segments to lines as Strings for checking the results of the test.*/
 	def toLines(lines: List[List[ToLog]]): List[String] =
 		lines.map(_.map(_.contentOnly).mkString)
@@ -61,41 +61,41 @@ object LogWriterTest extends Properties("Log Writer")
 			case (line, log : Log) => log.level == Lvl && line == log.msg
 			case _ => false
 		}
-	
+
 	/* The following are implicit generators to build up a write sequence.
 	* ToLog represents a written segment.  NewLine represents one of the possible
 	* newline separators.  A List[ToLog] represents a full line and always includes a
 	* final ToLog with a trailing '\n'.  Newline characters are otherwise not present in
 	* the `content` of a ToLog instance.*/
-	
+
 	implicit lazy val arbOut: Arbitrary[Output] = Arbitrary(genOutput)
 	implicit lazy val arbLog: Arbitrary[ToLog] = Arbitrary(genLog)
 	implicit lazy val arbLine: Arbitrary[List[ToLog]] = Arbitrary(genLine)
 	implicit lazy val arbNewLine: Arbitrary[NewLine] = Arbitrary(genNewLine)
 	implicit lazy val arbLevel : Arbitrary[Level.Value] = Arbitrary(genLevel)
-	
+
 	implicit def genLine(implicit logG: Gen[ToLog]): Gen[List[ToLog]] =
 		for(l <- listOf[ToLog](MaxSegments); last <- logG) yield
 			(addNewline(last) :: l.filter(!_.content.isEmpty)).reverse
 
-	implicit def genLog(implicit content: Arbitrary[String], byChar: Arbitrary[Boolean]): Gen[ToLog] = 
+	implicit def genLog(implicit content: Arbitrary[String], byChar: Arbitrary[Boolean]): Gen[ToLog] =
 		for(c <- content.arbitrary; by <- byChar.arbitrary) yield
 		{
 			assert(c != null)
 			new ToLog(removeNewlines(c), by)
 		}
-		
+
 	implicit lazy val genNewLine: Gen[NewLine] =
 		for(str <- oneOf("\n", "\r", "\r\n")) yield
 			new NewLine(str)
-			
+
 	implicit lazy val genLevel: Gen[Level.Value] =
 		oneOf(Level.values.toSeq)
-	
+
 	implicit lazy val genOutput: Gen[Output] =
 		for(ls <- listOf[List[ToLog]](MaxLines); lv <- genLevel) yield
 			new Output(ls, lv)
-		
+
 	def removeNewlines(s: String) = s.replaceAll("""[\n\r]+""", "")
 	def addNewline(l: ToLog): ToLog =
 		new ToLog(l.content + "\n", l.byCharacter) // \n will be replaced by a random line terminator for all lines
@@ -108,7 +108,7 @@ object LogWriterTest extends Properties("Log Writer")
 
 final class Output(val lines: List[List[ToLog]], val level: Level.Value) extends NotNull
 {
-	override def toString = 
+	override def toString =
 		"Level: " + level + "\n" + lines.map(_.mkString).mkString("\n")
 }
 final class NewLine(val str: String) extends NotNull
@@ -147,14 +147,14 @@ object Escape
 final class RecordingLogger extends BasicLogger
 {
 	private var events: List[LogEvent] = Nil
-	
+
 	def getEvents = events.reverse
-	
+
 	override def ansiCodesSupported = true
 	def trace(t: => Throwable) { events ::= new Trace(t) }
 	def log(level: Level.Value, message: => String) { events ::= new Log(level, message) }
 	def success(message: => String) { events ::= new Success(message) }
 	def logAll(es: Seq[LogEvent]) { events :::= es.toList }
 	def control(event: ControlEvent.Value, message: => String) { events ::= new ControlEvent(event, message) }
-	
+
 }

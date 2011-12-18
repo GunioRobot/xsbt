@@ -24,7 +24,7 @@ object Act
 			confAmb <- config( index configs proj )
 			keyConfs <- key(index, proj, configs(confAmb, defaultConfigs, proj), keyMap)
 			keyConfTaskExtra <- {
-				val andTaskExtra = (key: AttributeKey[_], conf: Option[String]) => 
+				val andTaskExtra = (key: AttributeKey[_], conf: Option[String]) =>
 					taskExtrasParser(index.tasks(proj, conf, key.label), keyMap, IMap.empty) map { case (task, extra) => (key, conf, task, extra) }
 				oneOf(keyConfs map { _ flatMap andTaskExtra.tupled })
 			}
@@ -37,7 +37,7 @@ object Act
 		p !!! ("Expected " + label) examples exs
 	def examplesStrict(p: Parser[String], exs: Set[String], label: String): Parser[String] =
 		filterStrings(examples(p, exs, label), exs, label)
-		
+
 	def optionalAxis[T](p: Parser[T], ifNone: ScopeAxis[T]): Parser[ScopeAxis[T]] =
 		p.? map { opt => toAxis(opt, ifNone) }
 	def toAxis[T](opt: Option[T], ifNone: ScopeAxis[T]): ScopeAxis[T] =
@@ -79,7 +79,7 @@ object Act
 	{
 		val extras = extrasParser(knownKeys, knownValues)
 		val taskParser = optionalAxis(taskAxisParser(tasks, knownKeys), Global)
-		val taskAndExtra = 
+		val taskAndExtra =
 			taskParser flatMap { taskAxis =>
 				if(taskAxis.isSelect)
 					optionalAxis(spacedComma ~> extras, Global) map { x => (taskAxis, x) }

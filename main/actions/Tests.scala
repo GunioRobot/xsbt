@@ -21,7 +21,7 @@ object Tests
 {
 	// (overall result, individual results)
 	type Output = (TestResult.Value, Map[String,TestResult.Value])
-	
+
 	final case class Setup(setup: ClassLoader => Unit) extends TestOption
 	def Setup(setup: () => Unit) = new Setup(_ => setup())
 
@@ -42,7 +42,7 @@ object Tests
 
 	final class Execution(val options: Seq[TestOption], val parallel: Boolean, val tags: Seq[(Tag, Int)])
 
-	def apply(frameworks: Map[TestFramework, Framework], testLoader: ClassLoader, discovered: Seq[TestDefinition], options: Seq[TestOption], parallel: Boolean, noTestsMessage: => String, log: Logger): Task[Output] =	
+	def apply(frameworks: Map[TestFramework, Framework], testLoader: ClassLoader, discovered: Seq[TestDefinition], options: Seq[TestOption], parallel: Boolean, noTestsMessage: => String, log: Logger): Task[Output] =
 		apply(frameworks, testLoader, discovered, new Execution(options, parallel, Nil), noTestsMessage, log)
 
 	def apply(frameworks: Map[TestFramework, Framework], testLoader: ClassLoader, discovered: Seq[TestDefinition], config: Execution, noTestsMessage: => String, log: Logger): Task[Output] =

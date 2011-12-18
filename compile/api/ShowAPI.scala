@@ -22,7 +22,7 @@ object ShowAPI
 {
 	def Show[T](implicit s: Show[T]): Show[T] = s
 	def show[T](t: T)(implicit s: Show[T]): String = s.show(t)
-	
+
 	def bounds(lower: Type, upper: Type)(implicit t: Show[Type]): String =
 		">: " + t.show(lower) + " <: " + t.show(upper)
 
@@ -34,7 +34,7 @@ object ShowAPI
 			case Repeated => base + "*"
 			case ByName => "=> " + base
 		}
-		
+
 	def concat[A](list: Seq[A], as: Show[A], sep: String): String = mapSeq(list, as).mkString(sep)
 	def commas[A](list: Seq[A], as: Show[A]): String = concat(list, as, ", ")
 	def spaced[A](list: Seq[A], as: Show[A]): String = concat(list, as, " ")
@@ -46,21 +46,21 @@ trait ShowBase
 {
 	implicit def showAnnotation(implicit as: Show[AnnotationArgument], t: Show[Type]): Show[Annotation] =
 		new Show[Annotation] { def show(a: Annotation) = "@" + t.show(a.base) + (if(a.arguments.isEmpty) "" else "(" + commas(a.arguments, as) + ")") }
-		
+
 	implicit def showAnnotationArgument: Show[AnnotationArgument] =
 		new Show[AnnotationArgument] { def show(a: AnnotationArgument) = a.name + " = " + a.value }
-		
+
 		import Variance._
-	implicit def showVariance: Show[Variance] = 
+	implicit def showVariance: Show[Variance] =
 		new Show[Variance] { def show(v: Variance) = v match { case Invariant => ""; case Covariant => "+"; case Contravariant => "-" } }
-	
+
 	implicit def showSource(implicit ps: Show[Package], ds: Show[Definition]): Show[SourceAPI] =
 		new Show[SourceAPI] { def show(a: SourceAPI) = lines(a.packages, ps) + "\n" + lines(a.definitions, ds) }
 
 	implicit def showPackage: Show[Package] =
 		new Show[Package] { def show(pkg: Package) = "package " + pkg.name }
 
-	implicit def showAccess(implicit sq: Show[Qualified]): Show[Access] = 
+	implicit def showAccess(implicit sq: Show[Qualified]): Show[Access] =
 		new Show[Access]
 		{
 			def show(a: Access) =
@@ -81,7 +81,7 @@ trait ShowBase
 				})
 				+ sq.show(q.qualifier) )
 		}
-	implicit def showQualifier: Show[Qualifier] = 
+	implicit def showQualifier: Show[Qualifier] =
 		new Show[Qualifier]
 		{
 			def show(q: Qualifier) =
@@ -108,7 +108,7 @@ trait ShowBase
 				mods.filter(_._1).map(_._2).mkString(" ")
 			}
 		}
-		
+
 	implicit def showDefinitionType: Show[DefinitionType] =
 		new Show[DefinitionType] {
 			import DefinitionType._
@@ -126,19 +126,19 @@ trait ShowDefinitions
 {
 	implicit def showVal(implicit acs: Show[Access], ms: Show[Modifiers], ans: Show[Annotation], t: Show[Type]): Show[Val] =
 		new Show[Val] { def show(v: Val) = definitionBase(v, "val")(acs, ms, ans) + ": " + t.show(v.tpe) }
-		
+
 	implicit def showVar(implicit acs: Show[Access], ms: Show[Modifiers], ans: Show[Annotation], t: Show[Type]): Show[Var] =
 		new Show[Var] { def show(v: Var) = definitionBase(v, "var")(acs, ms, ans) + ": " + t.show(v.tpe) }
-		
+
 	implicit def showDef(implicit acs: Show[Access], ms: Show[Modifiers], ans: Show[Annotation], tp: Show[Seq[TypeParameter]], vp: Show[Seq[ParameterList]], t: Show[Type]): Show[Def] =
 		new Show[Def] { def show(d: Def) = parameterizedDef(d, "def")(acs, ms, ans, tp) + vp.show(d.valueParameters) + ": " + t.show(d.returnType) }
-		
+
 	implicit def showClassLike(implicit acs: Show[Access], ms: Show[Modifiers], ans: Show[Annotation], tp: Show[Seq[TypeParameter]], dt: Show[DefinitionType], s: Show[Structure], t: Show[Type]): Show[ClassLike] =
 		new Show[ClassLike] { def show(cl: ClassLike) = parameterizedDef(cl, dt.show(cl.definitionType))(acs, ms, ans, tp) + " requires " + t.show(cl.selfType) + " extends " + s.show(cl.structure) }
-		
+
 	implicit def showTypeAlias(implicit acs: Show[Access], ms: Show[Modifiers], ans: Show[Annotation], tp: Show[Seq[TypeParameter]], t: Show[Type]): Show[TypeAlias] =
 		new Show[TypeAlias] { def show(ta: TypeAlias) = parameterizedDef(ta, "type")(acs, ms, ans, tp) + " = " + t.show(ta.tpe) }
-		
+
 	implicit def showTypeDeclaration(implicit acs: Show[Access], ms: Show[Modifiers], ans: Show[Annotation], tp: Show[Seq[TypeParameter]], t: Show[Type]): Show[TypeDeclaration] =
 		new Show[TypeDeclaration] { def show(td: TypeDeclaration) = parameterizedDef(td, "type")(acs, ms, ans, tp) + bounds(td.lowerBound, td.upperBound) }
 	def showClassLikeSimple(implicit acs: Show[Access], ms: Show[Modifiers], ans: Show[Annotation], tp: Show[Seq[TypeParameter]], dt: Show[DefinitionType]): Show[ClassLike] =
@@ -155,7 +155,7 @@ trait ShowDefinition
 	implicit def showDefinition(implicit vl: Show[Val], vr: Show[Var], ds: Show[Def], cl: Show[ClassLike], ta: Show[TypeAlias], td: Show[TypeDeclaration]): Show[Definition] =
 		new Show[Definition]
 		{
-			def show(d: Definition) = 
+			def show(d: Definition) =
 				d match
 				{
 					case v: Val => vl.show(v)
@@ -183,10 +183,10 @@ trait ShowType
 					case q: Polymorphic => po.show(q)
 				}
 		}
-	
+
 	implicit def showSimpleType(implicit pr: Show[Projection], pa: Show[ParameterRef], si: Show[Singleton], et: Show[EmptyType], p: Show[Parameterized]): Show[SimpleType] =
 		new Show[SimpleType] {
-			def show(t: SimpleType) = 
+			def show(t: SimpleType) =
 				t match
 				{
 					case q: Projection => pr.show(q)
@@ -214,7 +214,7 @@ trait ShowTypes
 				// don't show inherited to avoid dealing with cycles
 				concat(s.parents, t, " with ") + "\n{\n" + lines(s.declared, d) + "\n}"
 		}
-	implicit def showAnnotated(implicit as: Show[Annotation], t: Show[Type]): Show[Annotated] = 
+	implicit def showAnnotated(implicit as: Show[Annotation], t: Show[Type]): Show[Annotated] =
 		new Show[Annotated] { def show(a: Annotated) = spaced(a.annotations, as) + " " + t.show(a.baseType) }
 	implicit def showProjection(implicit t: Show[SimpleType]): Show[Projection] =
 		new Show[Projection] { def show(p: Projection) = t.show(p.prefix) + "#" + p.id }
@@ -229,14 +229,14 @@ trait ShowTypes
 		}
 	implicit def showPolymorphic(implicit t: Show[Type], tps: Show[Seq[TypeParameter]]): Show[Polymorphic] =
 		new Show[Polymorphic] { def show(p: Polymorphic) = t.show(p.baseType) + tps.show(p.parameters) }
-		
+
 }
 
 trait ShowPath
 {
 	implicit def showPath(implicit pc: Show[PathComponent]): Show[Path] =
 		new Show[Path] { def show(p: Path) = mapSeq(p.components, pc).mkString(".") }
-	
+
 	implicit def showPathComponent(implicit sp: Show[Path]): Show[PathComponent] =
 		new Show[PathComponent] {
 			def show(p: PathComponent) =
@@ -255,7 +255,7 @@ trait ShowValueParameters
 		new Show[Seq[ParameterList]] { def show(p: Seq[ParameterList]) = concat(p,pl, "") }
 	implicit def showParameterList(implicit mp: Show[MethodParameter]): Show[ParameterList] =
 		new Show[ParameterList] { def show(pl: ParameterList) = "(" + (if(pl.isImplicit) "implicit " else "") + commas(pl.parameters, mp) + ")" }
-		
+
 	implicit def showMethodParameter(implicit t: Show[Type]): Show[MethodParameter] =
 		new Show[MethodParameter] {
 			def show(mp: MethodParameter) =
@@ -287,23 +287,23 @@ object DefaultShowAPI extends ShowBase with ShowBasicTypes with ShowValueParamet
 	implicit lazy val showTypeDeclaration: Show[TypeDeclaration] = Cyclic.showTypeDeclaration
 	implicit lazy val showTypeAlias: Show[TypeAlias] = Cyclic.showTypeAlias
 	implicit lazy val showDef: Show[Def] = Cyclic.showDef
-	
+
 	implicit lazy val showProj: Show[Projection] = Cyclic.showProjection
 	implicit lazy val showPoly: Show[Polymorphic] = Cyclic.showPolymorphic
-	
+
 	implicit lazy val showSimple: Show[SimpleType] = new ShowLazy(Cyclic.showSimpleType)
 	implicit lazy val showAnnotated: Show[Annotated] = Cyclic.showAnnotated
 	implicit lazy val showExistential: Show[Existential] = Cyclic.showExistential
 	implicit lazy val showConstant: Show[Constant] = Cyclic.showConstant
 	implicit lazy val showParameterized: Show[Parameterized] = Cyclic.showParameterized
-	
+
 	implicit lazy val showTypeParameters: Show[Seq[TypeParameter]] = new ShowLazy(Cyclic.showTypeParameters)
 	implicit lazy val showTypeParameter: Show[TypeParameter] = Cyclic.showTypeParameter
-	
+
 	implicit lazy val showDefinition: Show[Definition] = new ShowLazy(Cyclic.showDefinition)
 	implicit lazy val showType: Show[Type] = new ShowLazy(Cyclic.showType)
 	implicit lazy val showStructure: Show[Structure] = new ShowLazy(Cyclic.showStructure)
-	
+
 	implicit lazy val showPath: Show[Path] = new ShowLazy(Cyclic.showPath)
 	implicit lazy val showPathComponent: Show[PathComponent] = Cyclic.showPathComponent
 

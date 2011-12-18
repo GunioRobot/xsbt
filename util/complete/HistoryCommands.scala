@@ -23,7 +23,7 @@ object HistoryCommands
 	def StartsWithString = Start + "string"
 	def Previous = Start + "-n"
 	def Nth = Start + "n"
-	
+
 	private def h(s: String) = Start + s
 	def plainCommands = Seq(ListFull, Start, LastFull, ContainsFull)
 

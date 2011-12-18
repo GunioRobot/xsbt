@@ -57,7 +57,7 @@ private class TagTypeVariables
 	def tagValueParameters(valueParameters: Seq[ParameterList]) = valueParameters.foreach(tagValueParameterList)
 	def tagValueParameterList(list: ParameterList) = list.parameters.foreach(tagValueParameter)
 	def tagValueParameter(parameter: MethodParameter) = tagType(parameter.tpe)
-		
+
 	def tagParameterizedDefinition[T <: ParameterizedDefinition](d: T)(tagExtra: => Unit)
 	{
 		tagAnnotations(d.annotations)
@@ -75,7 +75,7 @@ private class TagTypeVariables
 		tagParameterizedDefinition(d) {
 			tagType(d.tpe)
 		}
-	
+
 	def tagTypeParameters(parameters: Seq[TypeParameter]) = parameters.foreach(tagTypeParameter)
 	def tagTypeParameter(parameter: TypeParameter)
 	{
@@ -87,7 +87,7 @@ private class TagTypeVariables
 		}
 	}
 	def tagAnnotations(annotations: Seq[Annotation]) = tagTypes(annotations.map(_.base))
-	
+
 	def tagTypes(ts: Seq[Type]) = ts.foreach(tagType)
 	def tagType(t: Type)
 	{
@@ -130,15 +130,15 @@ private class TagTypeVariables
 			tagTypeParameters(parameters)
 			tagType(base)
 		}
-	
+
 	def scope(action: => Unit)
 	{
 		val saveIndex = index
 		index = 0
 		level += 1
-		
+
 		action
-		
+
 		level -= 1
 		index = saveIndex
 	}

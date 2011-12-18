@@ -13,11 +13,11 @@ trait Analysis
 	val stamps: Stamps
 	val apis: APIs
 	val relations: Relations
-	
+
 	def ++(other: Analysis): Analysis
 	def -- (sources: Iterable[File]): Analysis
 	def copy(stamps: Stamps = stamps, apis: APIs = apis, relations: Relations = relations): Analysis
-	
+
 	def addSource(src: File, api: Source, stamp: Stamp, internalDeps: Iterable[File]): Analysis
 	def addBinaryDep(src: File, dep: File, className: String, stamp: Stamp): Analysis
 	def addExternalDep(src: File, dep: String, api: Source): Analysis
@@ -51,7 +51,7 @@ private class MAnalysis(val stamps: Stamps, val apis: APIs, val relations: Relat
 	{
 		val newRelations = relations -- sources
 		def keep[T](f: (Relations, T) => Set[_]): T => Boolean = file => !f(newRelations, file).isEmpty
-		
+
 		val newAPIs = apis.removeInternal(sources).filterExt( keep(_ usesExternal _) )
 		val newStamps = stamps.filter( keep(_ produced _), sources, keep(_ usesBinary _))
 		new MAnalysis(newStamps, newAPIs, newRelations)

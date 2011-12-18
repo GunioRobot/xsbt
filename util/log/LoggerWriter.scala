@@ -9,7 +9,7 @@ class LoggerWriter(delegate: Logger, unbufferedLevel: Option[Level.Value], nl: S
 {
 	def this(delegate: Logger, level: Level.Value) = this(delegate, Some(level))
 	def this(delegate: Logger) = this(delegate, None)
-	
+
 	private[this] val buffer = new StringBuilder
 	private[this] val lines = new collection.mutable.ListBuffer[String]
 

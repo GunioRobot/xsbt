@@ -16,7 +16,7 @@ trait TypeFunctions
 	final val some = new (Id ~> Some) { def apply[T](t: T) = Some(t) }
 	final def idFun[T] = (t: T) => t
 	final def const[A,B](b: B): A=> B = _ => b
-	
+
 	def nestCon[M[_], N[_], G[_]](f: M ~> N): (M ∙ G)#l ~> (N ∙ G)#l =
 		f.asInstanceOf[(M ∙ G)#l ~> (N ∙ G)#l] // implemented with a cast to avoid extra object+method call.  castless version:
 	/* new ( (M ∙ G)#l ~> (N ∙ G)#l ) {
@@ -26,7 +26,7 @@ trait TypeFunctions
 	implicit def toFn1[A,B](f: A => B): Fn1[A,B] = new Fn1[A,B] {
 		def ∙[C](g: C => A) = f compose g
 	}
-	
+
 	type Endo[T] = T=>T
 	type ~>|[A[_],B[_]] = A ~> Compose[Option, B]#Apply
 }

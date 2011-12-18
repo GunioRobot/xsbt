@@ -16,7 +16,7 @@ object Execute
 	trait Part1of2K[M[_[_], _], A[_]] { type Apply[T] = M[A, T] }
 	type NodeT[A[_]] = Part1of2K[Node, A]
 	type NodeView[A[_]] = A ~> NodeT[A]#Apply
-	
+
 	def idMap[A,B]: Map[A, B] = JavaConversions.asScalaMap(new java.util.IdentityHashMap[A,B])
 	def pMap[A[_], B[_]]: PMap[A,B] = new DelegatingPMap[A, B](idMap)
 	private[sbt] def completed(p: => Unit): Completed = new Completed {
@@ -93,7 +93,7 @@ final class Execute[A[_] <: AnyRef](checkCycles: Boolean, triggers: Triggers[A])
 
 		results.get(target) match {
 			case Some(result) => retire(node, result)
-			case None => 
+			case None =>
 				state(node) = Calling
 				addChecked(target)
 				addCaller(node, target)
@@ -206,7 +206,7 @@ final class Execute[A[_] <: AnyRef](checkCycles: Boolean, triggers: Triggers[A])
 		}
 	}
 	/** Enters the given node into the system. */
-	def register[T](node: A[T]): Node[A, T] = 
+	def register[T](node: A[T]): Node[A, T] =
 	{
 		state(node) = Pending
 		reverse(node) = Seq()

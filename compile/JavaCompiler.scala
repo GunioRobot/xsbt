@@ -50,13 +50,13 @@ object JavaCompiler
 		}
 	def directOrFork(cp: ClasspathOptions, scalaInstance: ScalaInstance)(implicit doFork: Fork): JavaCompiler =
 		construct(directOrForkJavac, cp, scalaInstance)
-		
+
 	def direct(cp: ClasspathOptions, scalaInstance: ScalaInstance): JavaCompiler =
 		construct(directJavac, cp, scalaInstance)
-	
+
 	def fork(cp: ClasspathOptions, scalaInstance: ScalaInstance)(implicit doFork: Fork): JavaCompiler =
 		construct(forkJavac, cp, scalaInstance)
-	
+
 	def directOrForkJavac(implicit doFork: Fork) = (contract: JavacContract, arguments: Seq[String], log: Logger) =>
 		try { directJavac(contract, arguments, log) }
 		catch { case e @ (_: ClassNotFoundException | _: NoSuchMethodException) =>

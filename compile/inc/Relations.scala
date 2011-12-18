@@ -11,7 +11,7 @@ trait Relations
 {
 	/** All sources _with at least one product_ . */
 	def allSources: collection.Set[File]
-	
+
 	def allProducts: collection.Set[File]
 	def allBinaryDeps: collection.Set[File]
 	def allInternalSrcDeps: collection.Set[File]
@@ -19,27 +19,27 @@ trait Relations
 
 	def classNames(src: File): Set[String]
 	def definesClass(name: String): Set[File]
-	
+
 	def products(src: File): Set[File]
 	def produced(prod: File): Set[File]
-	
+
 	def binaryDeps(src: File): Set[File]
 	def usesBinary(dep: File): Set[File]
-	
+
 	def internalSrcDeps(src: File): Set[File]
 	def usesInternalSrc(dep: File): Set[File]
-	
+
 	def externalDeps(src: File): Set[String]
 	def usesExternal(dep: String): Set[File]
-	
+
 	def addProduct(src: File, prod: File, name: String): Relations
 	def addExternalDep(src: File, dependsOn: String): Relations
 	def addInternalSrcDeps(src: File, dependsOn: Iterable[File]): Relations
 	def addBinaryDep(src: File, dependsOn: File): Relations
-	
+
 	def ++ (o: Relations): Relations
 	def -- (sources: Iterable[File]): Relations
-	
+
 	def srcProd: Relation[File, File]
 	def binaryDep: Relation[File, File]
 	def internalSrcDep: Relation[File, File]
@@ -83,13 +83,13 @@ private class MRelations(val srcProd: Relation[File, File], val binaryDep: Relat
 
 	def classNames(src: File): Set[String] = classes.forward(src)
 	def definesClass(name: String): Set[File] = classes.reverse(name)
-	
+
 	def products(src: File): Set[File] = srcProd.forward(src)
 	def produced(prod: File): Set[File] = srcProd.reverse(prod)
-	
+
 	def binaryDeps(src: File): Set[File] = binaryDep.forward(src)
 	def usesBinary(dep: File): Set[File] = binaryDep.reverse(dep)
-	
+
 	def internalSrcDeps(src: File): Set[File] = internalSrcDep.forward(src)
 	def usesInternalSrc(dep: File): Set[File] = internalSrcDep.reverse(dep)
 
@@ -107,7 +107,7 @@ private class MRelations(val srcProd: Relation[File, File], val binaryDep: Relat
 
 	def addBinaryDep(src: File, dependsOn: File): Relations =
 		new MRelations( srcProd, binaryDep + (src, dependsOn), internalSrcDep, externalDep, classes )
-	
+
 	def ++ (o: Relations): Relations =
 		new MRelations(srcProd ++ o.srcProd, binaryDep ++ o.binaryDep, internalSrcDep ++ o.internalSrcDep, externalDep ++ o.externalDep, classes ++ o.classes)
 	def -- (sources: Iterable[File]) =

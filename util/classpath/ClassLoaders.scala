@@ -21,7 +21,7 @@ abstract class LoaderBase(urls: Seq[URL], parent: ClassLoader) extends URLClassL
 				doLoadClass(className)
 			else
 				loaded
-			
+
 		if(resolve)
 			resolveClass(found)
 		found
@@ -62,7 +62,7 @@ class FilteredLoader(parent: ClassLoader, filter: ClassFilter) extends ClassLoad
 {
 	require(parent != null) // included because a null parent is legitimate in Java
 	def this(parent: ClassLoader, excludePackages: Iterable[String]) = this(parent, new ExcludePackagesFilter(excludePackages))
-	
+
 	@throws(classOf[ClassNotFoundException])
 	override final def loadClass(className: String, resolve: Boolean): Class[_] =
 	{
@@ -76,7 +76,7 @@ private class SelectiveLoader(urls: Array[URL], parent: ClassLoader, filter: Cla
 {
 	require(parent != null) // included because a null parent is legitimate in Java
 	def this(urls: Array[URL], parent: ClassLoader, includePackages: Iterable[String]) = this(urls, parent, new IncludePackagesFilter(includePackages))
-	
+
 	@throws(classOf[ClassNotFoundException])
 	override final def loadClass(className: String, resolve: Boolean): Class[_] =
 	{
@@ -135,7 +135,7 @@ trait NativeCopyLoader extends ClassLoader
 {
 	protected val config: NativeCopyConfig
 	import config._
-	
+
 	private[this] val mapped = new collection.mutable.HashMap[String, String]
 
 	override protected def findLibrary(name: String): String =

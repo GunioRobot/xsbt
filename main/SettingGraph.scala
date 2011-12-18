@@ -21,7 +21,7 @@ object SettingGraph
 		// val related = cMap.keys.filter(k => k.key == key && k.scope != scope)
 		val depends = cMap.get(scoped) match { case Some(c) => c.dependencies.toSet; case None => Set.empty }
 		// val reverse = reverseDependencies(cMap, scoped)
-	
+
 		SettingGraph(display(scoped), definedIn,
 			Project.scopedKeyData(structure, scope, key),
 			key.description, basedir,
@@ -81,7 +81,7 @@ object Graph
 			}
 			line +: withBar
 		}
-		
+
 		toAsciiLines(top, 0).mkString("\n")
 	}
 }

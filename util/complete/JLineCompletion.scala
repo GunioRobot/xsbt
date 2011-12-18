@@ -31,7 +31,7 @@ object JLineCompletion
 			completeImpl(reader, level)
 		}
 	}
-	
+
 	// always provides dummy completions so that the custom completion handler gets called
 	//   (ConsoleReader doesn't call the handler if there aren't any completions)
 	//   the custom handler will then throw away the candidates and call the custom function

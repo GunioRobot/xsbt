@@ -23,10 +23,10 @@ object Util
 	def project(path: File, nameString: String) = Project(normalize(nameString), path) settings( name := nameString )
 	def baseProject(path: File, nameString: String) = project(path, nameString) settings( base : _*)
 	def testedBaseProject(path: File, nameString: String) = baseProject(path, nameString) settings( testDependencies : _*)
-	
+
 	lazy val javaOnly = Seq[Setting[_]](/*crossPaths := false, */compileOrder := CompileOrder.JavaThenScala, unmanagedSourceDirectories in Compile <<= Seq(javaSource in Compile).join)
 	lazy val base: Seq[Setting[_]] = Seq(scalacOptions ++= Seq("-Xelide-below", "0"), projectComponent) ++ Licensed.settings
-	
+
 	def testDependencies = libraryDependencies ++= Seq(
 		"org.scala-tools.testing" %% "scalacheck" % "1.9" % "test",
 		"org.scala-tools.testing" %% "specs" % "1.6.9" % "test"
@@ -34,7 +34,7 @@ object Util
 
 	lazy val minimalSettings: Seq[Setting[_]] = Defaults.paths ++ Seq[Setting[_]](crossTarget <<= target.identity, name <<= thisProject(_.id))
 
-	def projectComponent = projectID <<= (projectID, componentID) { (pid, cid) => 
+	def projectComponent = projectID <<= (projectID, componentID) { (pid, cid) =>
 		cid match { case Some(id) => pid extra("e:component" -> id); case None => pid }
 	}
 
@@ -91,7 +91,7 @@ object Licensed
 	lazy val seeRegex = """\(see (.*?)\)""".r
 	def licensePath(base: File, str: String): File = { val path = base / str; if(path.exists) path else error("Referenced license '" + str + "' not found at " + path) }
 	def seePaths(base: File, noticeString: String): Seq[File] = seeRegex.findAllIn(noticeString).matchData.map(d => licensePath(base, d.group(1))).toList
-	
+
 	def settings: Seq[Setting[_]] = Seq(
 		notice <<= baseDirectory(_ / "NOTICE"),
 		unmanagedResources in Compile <++= (notice, extractLicenses) map { _ +: _ },

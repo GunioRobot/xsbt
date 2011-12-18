@@ -518,13 +518,13 @@ object IO
 
 	def readLines(file: File, charset: Charset = defaultCharset): List[String] =
 		fileReader(charset)(file)(readLines)
-		
-	def readLines(in: BufferedReader): List[String] = 
+
+	def readLines(in: BufferedReader): List[String] =
 		foldLines[List[String]](in, Nil)( (accum, line) => line :: accum ).reverse
-	
+
 	def foreachLine(in: BufferedReader)(f: String => Unit): Unit =
 		foldLines(in, ())( (_, line) => f(line) )
-		
+
 	def foldLines[T](in: BufferedReader, init: T)(f: (T, String) => T): T =
 	{
 		def readLine(accum: T): T =
@@ -534,14 +534,14 @@ object IO
 		}
 		readLine(init)
 	}
-	
+
 	def writeLines(file: File, lines: Seq[String], charset: Charset = defaultCharset, append: Boolean = false): Unit =
 		writer(file, lines.headOption.getOrElse(""), charset, append) { w =>
 			lines.foreach { line => w.write(line); w.newLine() }
 		}
 	def writeLines(writer: PrintWriter, lines: Seq[String]): Unit =
 		lines foreach writer.println
-		
+
 	def write(properties: Properties, label: String, to: File) =
 		fileOutputStream()(to) { output => properties.store(output, label) }
 	def load(properties: Properties, from: File): Unit =
@@ -574,7 +574,7 @@ object IO
 
 	def move(files: Traversable[(File, File)]): Unit =
 		files.foreach(Function.tupled(move))
-		
+
 	def move(a: File, b: File): Unit =
 	{
 		if(b.exists)
@@ -596,7 +596,7 @@ object IO
 		Using.fileInputStream(file) { fin =>
 		Using.gzipInputStream(fin) { ing =>
 		Using.bufferedInputStream(ing)(f) }}
-	
+
 	/** Converts an absolute File to a URI.  The File is converted to a URI (toURI),
 	* normalized (normalize), encoded (toASCIIString), and a forward slash ('/') is appended to the path component if
 	* it does not already end with a slash.

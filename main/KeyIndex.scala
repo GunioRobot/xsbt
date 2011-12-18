@@ -97,7 +97,7 @@ private final class KeyIndex0(val data: BuildIndex) extends ExtendableKeyIndex
 		val (build, project) = parts(proj)
 		data.projectIndex(build).confIndex(project)
 	}
-	def parts(proj: Option[Reference]): (Option[URI], Option[String]) = 
+	def parts(proj: Option[Reference]): (Option[URI], Option[String]) =
 		proj match
 		{
 			case Some(ProjectRef(uri, id)) => (Some(uri), Some(id))

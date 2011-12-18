@@ -4,7 +4,7 @@ object Signals
 {
 	def withHandler[T](handler: () => Unit)(action: () => T): T =
 	{
-		val result = 
+		val result =
 			try
 			{
 				val signals = new Signals0
@@ -21,7 +21,7 @@ object Signals
 
 // Must only be referenced using a
 //   try { } catch { case e: LinkageError => ... }
-// block to 
+// block to
 private final class Signals0
 {
 	// returns a LinkageError in `action` as Left(t) in order to avoid it being
@@ -32,7 +32,7 @@ private final class Signals0
 		val intSignal = new Signal("INT")
 		val newHandler = new SignalHandler {
 			def handle(sig: Signal) { handler() }
-		}	
+		}
 
 		val oldHandler = Signal.handle(intSignal, newHandler)
 

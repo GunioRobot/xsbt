@@ -24,7 +24,7 @@ object TrapExit
 	def apply(execute: => Unit, log: Logger): Int =
 	{
 		log.debug("Starting sandboxed run...")
-		
+
 		/** Take a snapshot of the threads that existed before execution in order to determine
 		* the threads that were created by 'execute'.*/
 		val originalThreads = allThreads
@@ -40,7 +40,7 @@ object TrapExit
 			}
 		val customThreadGroup = new ExitThreadGroup(new ExitHandler(originalThreads, code, log))
 		val executionThread = new Thread(customThreadGroup, "run-main") { override def run() { executeMain } }
-		
+
 		val originalSecurityManager = System.getSecurityManager
 		try
 		{
@@ -66,7 +66,7 @@ object TrapExit
 		stopAll(originalThreads)
 		1
 	}
-	
+
 	 // wait for all non-daemon threads to terminate
 	private def waitForExit(originalThreads: Set[Thread], log: Logger)
 	{
@@ -110,7 +110,7 @@ object TrapExit
 				withCause(cause)(withType)(notType)(mf)
 		}
 	}
-	
+
 	/** Returns all threads that are not in the 'system' thread group and are not the AWT implementation
 	* thread (AWT-XAWT, AWT-Windows, ...)*/
 	private def allThreads: Set[Thread] =
@@ -131,7 +131,7 @@ object TrapExit
 			(group != null) && (group.getName == "system")
 		}
 	}
-	/** Calls the provided function for each thread in the system as provided by the 
+	/** Calls the provided function for each thread in the system as provided by the
 	* allThreads function except those in ignoreThreads.*/
 	private def processThreads(ignoreThreads: Set[Thread], process: Thread => Unit)
 	{

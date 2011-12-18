@@ -15,7 +15,7 @@ public interface AppProvider
 	/** Creates a new instance of the entry point of the application given by 'id'.
 	* It is guaranteed that newMain().getClass() == mainClass()*/
 	public AppMain newMain();
-	
+
 	/** The classpath from which the main class is loaded, excluding Scala jars.*/
 	public File[] mainClasspath();
 

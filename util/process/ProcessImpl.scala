@@ -124,10 +124,10 @@ private abstract class AbstractProcessBuilder extends ProcessBuilder with SinkPa
 		new PipedProcessBuilder(this, other, false)
 	}
 	def ###(other: ProcessBuilder): ProcessBuilder = new SequenceProcessBuilder(this, other)
-	
+
 	protected def toSource = this
 	protected def toSink = this
-	
+
 	def run(): Process = run(false)
 	def run(connectInput: Boolean): Process = run(BasicIO.standard(connectInput))
 	def run(log: ProcessLogger): Process = run(log, false)
@@ -204,19 +204,19 @@ private abstract class CompoundProcess extends BasicProcess
 	def exitValue() = getExitValue().getOrElse(error("No exit code: process destroyed."))
 
 	def start() = getExitValue
-	
+
 	protected lazy val (getExitValue, destroyer) =
 	{
 		val code = new SyncVar[Option[Int]]()
 		code.set(None)
 		val thread = Spawn(code.set(runAndExitValue()))
-		
+
 		(
 			Future { thread.join(); code.get },
 			() => thread.interrupt()
 		)
 	}
-	
+
 	/** Start and block until the exit value is available and then return it in Some.  Return None if destroyed (use 'run')*/
 	protected[this] def runAndExitValue(): Option[Int]
 
@@ -280,7 +280,7 @@ private class PipedProcesses(a: ProcessBuilder, b: ProcessBuilder, defaultIO: Pr
 		val pipeOut = new PipedOutputStream
 		val source = new PipeSource(currentSource, pipeOut, a.toString)
 		source.start()
-		
+
 		val pipeIn = new PipedInputStream(pipeOut)
 		val currentSink = new SyncVar[Option[OutputStream]]
 		val sink = new PipeSink(pipeIn, currentSink, b.toString)
@@ -294,7 +294,7 @@ private class PipedProcesses(a: ProcessBuilder, b: ProcessBuilder, defaultIO: Pr
 			else
 				defaultIO.withOutput(handleOutOrError)
 		val secondIO = defaultIO.withInput(toInput => currentSink.put(Some(toInput)) )
-		
+
 		val second = b.run(secondIO)
 		val first = a.run(firstIO)
 		try

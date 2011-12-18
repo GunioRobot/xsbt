@@ -21,7 +21,7 @@ object MapIO
 		map.clear
 		val properties = new Properties
 		IO.load(properties, from)
-		
+
 		import collection.JavaConversions._
 		for(n <- properties.propertyNames)
 		{
@@ -37,7 +37,7 @@ object MapIO
 	}
 	def all[Key, Value](map: Map[Key, Set[Value]]): Iterable[Value] =
 		map.values.toList.flatMap(set => set.toList)
-	
+
 	def add[Key, Value](key: Key, value: Value, map: Map[Key, Set[Value]]): Unit =
 		map.getOrElseUpdate(key, new HashSet[Value]) + value
 }

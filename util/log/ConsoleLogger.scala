@@ -40,7 +40,7 @@ object ConsoleLogger
 
 	private[this] def os = System.getProperty("os.name")
 	private[this] def isWindows = os.toLowerCase.indexOf("windows") >= 0
-	
+
 	def apply(): ConsoleLogger = apply(systemOut)
 	def apply(out: PrintStream): ConsoleLogger = apply(printStreamOut(out))
 	def apply(out: PrintWriter): ConsoleLogger = apply(printWriterOut(out))
@@ -87,7 +87,7 @@ class ConsoleLogger private[ConsoleLogger](val out: ConsoleOut, override val ans
 			log(labelColor(level), level.toString, messageColor(level), message)
 	}
 	private def reset(): Unit = setColor(RESET)
-	
+
 	private def setColor(color: String)
 	{
 		if(ansiCodesSupported && useColor)

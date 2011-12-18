@@ -16,7 +16,7 @@ class ConsoleInterface
 		val options = args.toList
 		lazy val interpreterSettings = MakeSettings.sync(options, log)
 		val compilerSettings = MakeSettings.sync(options, log)
-		
+
 		if(!bootClasspathString.isEmpty)
 			compilerSettings.bootclasspath.value = bootClasspathString
 		compilerSettings.classpath.value = classpathString
@@ -25,9 +25,9 @@ class ConsoleInterface
 		log.debug(Message("  Classpath: " + compilerSettings.classpath.value))
 		log.info(Message(""))
 		val loop = new InterpreterLoop {
-		
+
 			override def createInterpreter() = {
-			
+
 				if(loader ne null)
 				{
 					in = InteractiveReader.createDefault()
@@ -40,10 +40,10 @@ class ConsoleInterface
 				}
 				else
 					super.createInterpreter()
-					
+
 				for( (id, value) <- bindNames zip bindValues)
 					interpreter.beQuietDuring(interpreter.bind(id, value.asInstanceOf[AnyRef].getClass.getName, value))
-			
+
 				if(!initialCommands.isEmpty)
 					interpreter.interpret(initialCommands)
 			}

@@ -39,7 +39,7 @@ class ScriptRunner
 			}
 		}
 		val handlers = Set() ++ statements.map(_._1)
-		
+
 		try
 		{
 			handlers.foreach { handler => states(handler) = handler.initialState }

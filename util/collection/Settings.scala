@@ -75,7 +75,7 @@ trait Init[Scope]
 
 	def compiled(init: Seq[Setting[_]], actual: Boolean = true)(implicit delegates: Scope => Seq[Scope], scopeLocal: ScopeLocal, display: Show[ScopedKey[_]]): CompiledMap =
 	{
-		// prepend per-scope settings 
+		// prepend per-scope settings
 		val withLocal = addLocal(init)(scopeLocal)
 		// group by Scope/Key, dropping dead initializations
 		val sMap: ScopedMap = grouped(withLocal)
@@ -113,7 +113,7 @@ trait Init[Scope]
 
 	def addLocal(init: Seq[Setting[_]])(implicit scopeLocal: ScopeLocal): Seq[Setting[_]] =
 		init.flatMap( _.dependencies flatMap scopeLocal )  ++  init
-		
+
 	def delegate(sMap: ScopedMap)(implicit delegates: Scope => Seq[Scope], display: Show[ScopedKey[_]]): ScopedMap =
 	{
 		def refMap(refKey: ScopedKey[_], isFirst: Boolean) = new ValidateRef { def apply[T](k: ScopedKey[T]) =
@@ -132,7 +132,7 @@ trait Init[Scope]
 		else
 			throw Uninitialized(sMap.keys.toSeq, delegates, undefineds.values.flatten.toList, false)
 	}
-	private[this] def delegateForKey[T](sMap: ScopedMap, k: ScopedKey[T], scopes: Seq[Scope], refKey: ScopedKey[_], isFirst: Boolean): Either[Undefined, ScopedKey[T]] = 
+	private[this] def delegateForKey[T](sMap: ScopedMap, k: ScopedKey[T], scopes: Seq[Scope], refKey: ScopedKey[_], isFirst: Boolean): Either[Undefined, ScopedKey[T]] =
 	{
 		def resolve(search: Seq[Scope]): Either[Undefined, ScopedKey[T]] =
 			search match {
@@ -144,7 +144,7 @@ trait Init[Scope]
 			}
 		resolve(scopes)
 	}
-		
+
 	private[this] def applyInits(ordered: Seq[Compiled[_]])(implicit delegates: Scope => Seq[Scope]): Settings[Scope] =
 	{
 		val x = java.util.concurrent.Executors.newFixedThreadPool(Runtime.getRuntime.availableProcessors)
@@ -194,7 +194,7 @@ trait Init[Scope]
 		override def toString = showFullKey(key)
 	}
 	final class Flattened(val key: ScopedKey[_], val dependencies: Iterable[ScopedKey[_]])
-	
+
 	def flattenLocals(compiled: CompiledMap): Map[ScopedKey[_],Flattened] =
 	{
 		import collection.breakOut
@@ -202,7 +202,7 @@ trait Init[Scope]
 		val ordered = Dag.topologicalSort(locals)(_.dependencies.flatMap(dep => if(dep.key.isLocal) Seq[Compiled[_]](compiled(dep)) else Nil))
 		def flatten(cmap: Map[ScopedKey[_],Flattened], key: ScopedKey[_], deps: Iterable[ScopedKey[_]]): Flattened =
 			new Flattened(key, deps.flatMap(dep => if(dep.key.isLocal) cmap(dep).dependencies else dep :: Nil))
-		
+
 		val empty = Map.empty[ScopedKey[_],Flattened]
 		val flattenedLocals = (empty /: ordered) { (cmap, c) => cmap.updated(c.key, flatten(cmap, c.key, c.dependencies)) }
 		compiled flatMap{ case (key, comp) =>

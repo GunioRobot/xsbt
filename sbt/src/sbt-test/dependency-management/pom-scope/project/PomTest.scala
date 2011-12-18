@@ -11,7 +11,7 @@ object PomTest extends Build
 			"b" % "b" % "1.0" % "runtime,optional",
 			"c" % "c" % "1.0" % "optional",
 			"d" % "d" % "1.0" % "test",
-			"e" % "e" % "1.0" % "custom",		
+			"e" % "e" % "1.0" % "custom",
 			"f" % "f" % "1.0" % "custom,optional,runtime",
 			"g" % "g" % "1.0" % "custom,runtime" classifier "foo"
 		)

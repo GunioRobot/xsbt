@@ -11,7 +11,7 @@ package sbt
 
 	import sbinary.{Format, Operations}
 
-@deprecated("Superseded by task state system.", "0.11.1") 
+@deprecated("Superseded by task state system.", "0.11.1")
 object TaskData
 {
 	val DefaultDataID = "data"
@@ -20,7 +20,7 @@ object TaskData
 		resolvedScoped { resolved =>
 			s => f(s, readData(Project structure s, resolved, readFrom.key, id) getOrElse default)
 		}
-	
+
 	def readData[T](structure: BuildStructure, reader: ScopedKey[_], readFrom: AttributeKey[_], id: String)(implicit f: Format[T]): Option[T] =
 		try {
 			dataStreams(structure, reader, readFrom) { (ts,key) =>

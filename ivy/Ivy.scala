@@ -317,7 +317,7 @@ private object IvySbt
 			m.copy(name = crossName(m.name, m.crossVersionRemap(cross)), explicitArtifacts = substituteCrossA(m.explicitArtifacts, cross))
 		else
 			m
-		
+
 	private def toIvyArtifact(moduleID: ModuleDescriptor, a: Artifact, configurations: Iterable[String]): MDArtifact =
 	{
 		val artifact = new MDArtifact(moduleID, a.name, a.`type`, a.extension, null, extra(a, false))

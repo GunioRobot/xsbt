@@ -5,7 +5,7 @@ package sbt
 
 	import java.io.File
 
-/** 
+/**
 Maintains a set of mappings so that they are uptodate.
 Specifically, 'apply' applies the mappings by creating target directories and copying source files to their destination.
 For each mapping no longer present, the old target is removed.
@@ -46,7 +46,7 @@ object Sync
 			writeInfo(cacheFile, relation, currentInfo)(inStyle.format)
 			relation
 		}
-		
+
 	def copy(source: File, target: File): Unit =
 		if(source.isFile)
 			IO.copyFile(source, target, true)
@@ -66,7 +66,7 @@ object Sync
 		if(!dups.isEmpty)
 			error("Duplicate mappings:" + dups.mkString)
 	}
-		
+
 		import java.io.{File, IOException}
 		import sbinary._
 		import Operations.{read, write}

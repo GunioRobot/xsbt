@@ -607,7 +607,7 @@ object Defaults extends BuildCommon
 		}
 	private[this] def isNewer(major: Int, minor: Int, minMajor: Int, minMinor: Int): Boolean =
 		major > minMajor || (major == minMajor && minor >= minMinor)
-	
+
 	def binaryVersion(full: String, cutoff: String): String =
 	{
 		def sub(major: Int, minor: Int) = major + "." + minor

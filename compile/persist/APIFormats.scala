@@ -38,7 +38,7 @@ trait APIFormats extends FormatExtra
 	// cyclic with formatSuper, so it is not implicit by default
 	def formatPath(implicit pc: Format[Array[PathComponent]]): Format[Path] =
 		wrap[Path, Array[PathComponent]]( _.components, x => new Path(x))(pc)
-	
+
 	implicit def formatComponent(implicit t: Format[This], s: Format[Super], i: Format[Id]): Format[PathComponent] =
 		asUnion(t, s, i)
 	def formatSuper(implicit p: Format[Path]): Format[Super] =
@@ -71,10 +71,10 @@ trait APIFormats extends FormatExtra
 
 	implicit def formatDef(implicit acs: Format[Access], ms: Format[Modifiers], ans: Format[Array[Annotation]], tp: Format[Array[TypeParameter]], vp: Format[Array[ParameterList]], t: Format[Type], fs: Format[String]): Format[Def] =
 		p7( (d: Def) => (d.valueParameters, d.returnType, d.typeParameters, d.name, d.access, d.modifiers, d.annotations))( new Def(_,_,_,_,_,_,_) )(vp, t, tp, fs, acs, ms, ans)
-		
+
 	implicit def formatVal(implicit acs: Format[Access], ms: Format[Modifiers], ans: Format[Array[Annotation]], t: Format[Type], ts: Format[String]): Format[Val] =
 		fieldLike( new Val(_,_,_,_,_) )(acs, ms, ans, ts, t)
-		
+
 	implicit def formatVar(implicit acs: Format[Access], ms: Format[Modifiers], ans: Format[Array[Annotation]], t: Format[Type], ts: Format[String]): Format[Var] =
 		fieldLike( new Var(_,_,_,_,_) )(acs, ms, ans, ts, t)
 
@@ -98,19 +98,19 @@ trait APIFormats extends FormatExtra
 
 	implicit def formatTypeAlias(implicit acs: Format[Access], ms: Format[Modifiers], ans: Format[Array[Annotation]], tps: Format[Array[TypeParameter]], t: Format[Type], n: Format[String]): Format[TypeAlias] =
 		p6( (ta: TypeAlias) => (ta.tpe, ta.typeParameters, ta.name, ta.access, ta.modifiers, ta.annotations))( new TypeAlias(_,_,_,_,_,_) )(t, tps, n, acs, ms, ans)
-		
+
 	implicit def formatTypeDeclaration(implicit acs: Format[Access], ms: Format[Modifiers], ans: Format[Array[Annotation]], tps: Format[Array[TypeParameter]], t: Format[Type], n: Format[String]): Format[TypeDeclaration] =
 		p7( (td: TypeDeclaration) => (td.lowerBound, td.upperBound, td.typeParameters, td.name, td.access, td.modifiers, td.annotations))( new TypeDeclaration(_,_,_,_,_,_,_))(t,t,tps,n,acs,ms,ans)
 
 	// cyclic with SimpleType
 	def formatAnnotation(implicit t: Format[Type], af: Format[Array[AnnotationArgument]]): Format[Annotation] =
 		p2( (a: Annotation) => (a.base, a.arguments) )( (a,b) => new Annotation(a,b) )(t, af)
-		
+
 	implicit def formatAnnotationArgument(implicit sf: Format[String]): Format[AnnotationArgument] =
 		p2( (aa: AnnotationArgument) => (aa.name, aa.value))( (a,b) => new AnnotationArgument(a,b))(sf, sf)
 
 
-	implicit def formatVariance(implicit b: Format[Byte]): Format[Variance] = 
+	implicit def formatVariance(implicit b: Format[Byte]): Format[Variance] =
 		wrap[Variance, Byte]( v => v.ordinal.toByte, b => Variance.values.apply(b.toInt) )(b)
 
 	implicit def formatDefinitionType(implicit b: Format[Byte]): Format[DefinitionType] =
@@ -181,7 +181,7 @@ trait APIFormats extends FormatExtra
 
 	implicit def formatParameterList(implicit mp: Format[Array[MethodParameter]], bf: Format[Boolean]): Format[ParameterList] =
 		p2( (pl: ParameterList) => (pl.parameters, pl.isImplicit) )( (ps, impl) => new ParameterList(ps, impl) )
-		
+
 	implicit def formatMethodParameter(implicit s: Format[String], b: Format[Boolean], m: Format[ParameterModifier], t: Format[Type]): Format[MethodParameter] =
 		p4( (mp: MethodParameter) => (mp.name, mp.tpe, mp.hasDefault, mp.modifier) )( new MethodParameter(_,_,_,_) )(s,t,b,m)
 

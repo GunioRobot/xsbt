@@ -30,7 +30,7 @@ object Scope
 
 	def replaceThis(thisScope: Scope): Scope => Scope = (scope: Scope) =>
 		Scope(subThis(thisScope.project, scope.project), subThis(thisScope.config, scope.config), subThis(thisScope.task, scope.task), subThis(thisScope.extra, scope.extra))
-		
+
 	def subThis[T](sub: ScopeAxis[T], into: ScopeAxis[T]): ScopeAxis[T] =
 		if(into == This) sub else into
 
@@ -40,7 +40,7 @@ object Scope
 			case _: Select[_] => scope
 			case _ => scope.copy(task = Select(key))
 		}
-		
+
 	def mapReference(f: Reference => Reference): Scope => Scope =
 		{
 			case Scope(Select(ref), a,b,c) => Scope(Select(f(ref)), a,b,c)
@@ -72,7 +72,7 @@ object Scope
 			case RootProject(uri) => RootProject(resolveBuild(current, uri))
 			case ProjectRef(uri, id) => ProjectRef(resolveBuild(current, uri), id)
 		}
-	def resolveBuild(current: URI, uri: URI): URI = 
+	def resolveBuild(current: URI, uri: URI): URI =
 		IO.directoryURI(current resolve uri)
 
 	def resolveReference(current: URI, rootProject: URI => String, ref: Reference): ResolvedReference =
@@ -81,7 +81,7 @@ object Scope
 			case br: BuildReference => resolveBuildRef(current, br)
 			case pr: ProjectReference => resolveProjectRef(current, rootProject, pr)
 		}
-		
+
 	def resolveProjectRef(current: URI, rootProject: URI => String, ref: ProjectReference): ProjectRef =
 		ref match
 		{
@@ -99,7 +99,7 @@ object Scope
 
 	def display(config: ConfigKey): String = config.name + ":"
 	def display(scope: Scope, sep: String): String = display(scope, sep, ref => Project.display(ref) + "/")
-	def display(scope: Scope, sep: String, showProject: Reference => String): String = 
+	def display(scope: Scope, sep: String, showProject: Reference => String): String =
 	{
 			import scope.{project, config, task, extra}
 		val projectPrefix = project.foldStrict(showProject, "*/", "./")
@@ -119,7 +119,7 @@ object Scope
 		(Scope(pref, conf, This, This), transformTaskName(key))
 	}
 	val ScopedKeyRegex = """((\w+)\/)?((\w+)\:)?([\w\-]+)""".r
-	
+
 	def transformTaskName(s: String) =
 	{
 		val parts = s.split("-+")
@@ -149,7 +149,7 @@ object Scope
 		extraInherit: (ResolvedReference, AttributeMap) => Seq[AttributeMap])(rawScope: Scope): Seq[Scope] =
 	{
 		val scope = Scope.replaceThis(GlobalScope)(rawScope)
-	
+
 		def nonProjectScopes(resolvedProj: ResolvedReference)(px: ScopeAxis[ResolvedReference]) =
 		{
 			val p = px.toOption getOrElse resolvedProj

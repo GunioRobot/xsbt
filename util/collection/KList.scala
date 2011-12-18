@@ -40,7 +40,7 @@ final case class KCons[H, T <: HList, +M[_]](head: M[H], tail: KList[M,T]) exten
 	// prepend
 	def :^: [N[X] >: M[X], G](g: N[G]) = KCons(g, this)
 	def toList = head :: tail.toList
-	
+
 	def combine[N[X] >: M[X]]: (H :+: T)#Wrap[N] = HCons(head, tail.combine)
 
 	override def toString = head + " :^: " + tail.toString
@@ -64,7 +64,7 @@ object KList
 {
 	// nicer alias for pattern matching
 	val :^: = KCons
-	
+
 	def fromList[M[_]](s: Seq[M[_]]): KList[M, _ <: HList] = if(s.isEmpty) KNil else KCons(s.head, fromList(s.tail))
 
 	// haven't found a way to convince scalac that KList[M, H :+: T] implies KCons[H,T,M]

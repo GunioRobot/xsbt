@@ -112,6 +112,6 @@ object Package
 
 	implicit def manifestEquiv: Equiv[Manifest] = defaultEquiv
 	implicit def manifestFormat: Format[Manifest] = streamFormat( _ write _, in => new Manifest(in))
-	
+
 	implicit def stringMapEquiv: Equiv[Map[File, String]] = defaultEquiv
 }

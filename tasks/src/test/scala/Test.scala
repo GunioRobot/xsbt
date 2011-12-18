@@ -45,9 +45,9 @@ object Test
 
 	def go()
 	{
-		def run[T](root: Task[T]) = 
+		def run[T](root: Task[T]) =
 			println("Result : " + Task.run(root, true, 2))
-	
+
 		run(a)
 		run(b)
 		run(b2)

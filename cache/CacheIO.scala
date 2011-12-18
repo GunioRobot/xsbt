@@ -17,7 +17,7 @@ object CacheIO
 		fromBytes(default)(bytes)(format, mf)
 	def fromBytes[T](default: => T)(bytes: Array[Byte])(implicit format: Format[T], mf: Manifest[Format[T]]): T =
 		if(bytes.isEmpty) default else Operations.fromByteArray(bytes)(stampedFormat(format))
-		
+
 	def fromFile[T](format: Format[T], default: => T)(file: File)(implicit mf: Manifest[Format[T]]): T =
 		fromFile(file, default)(format, mf)
 	def fromFile[T](file: File, default: => T)(implicit format: Format[T], mf: Manifest[Format[T]]): T =
@@ -25,7 +25,7 @@ object CacheIO
 	def fromFile[T](file: File)(implicit format: Format[T], mf: Manifest[Format[T]]): Option[T] =
 		try { Some( Operations.fromFile(file)(stampedFormat(format)) ) }
 		catch { case e: Exception => None }
-		
+
 	def toFile[T](format: Format[T])(value: T)(file: File)(implicit mf: Manifest[Format[T]]): Unit =
 		toFile(value)(file)(format, mf)
 	def toFile[T](value: T)(file: File)(implicit format: Format[T], mf: Manifest[Format[T]]): Unit =

@@ -43,7 +43,7 @@ final class ConfigurationReport(val configuration: String, val modules: Seq[Modu
 	*/
 	def allModules: Seq[ModuleID] = modules.map(mr => addConfiguration(mr.module))
 	private[this] def addConfiguration(mod: ModuleID): ModuleID = if(mod.configurations.isEmpty) mod.copy(configurations = Some(configuration)) else mod
-	
+
 	def retrieve(f: (String, ModuleID, Artifact, File) => File): ConfigurationReport =
 		new ConfigurationReport(configuration, modules map { _.retrieve( (mid,art,file) => f(configuration, mid, art, file)) }, evicted)
 }
@@ -87,7 +87,7 @@ object UpdateReport
 				if(file == null) error("Null file: conf=" + cReport.configuration + ", module=" + mReport.module + ", art: " + artifact)
 				file
 			}
-			
+
 		/** Constructs a new report that only contains files matching the specified filter.*/
 		def filter(f: DependencyFilter): UpdateReport =
 			moduleReportMap { (configuration, modReport) =>

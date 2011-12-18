@@ -1,6 +1,6 @@
 package xsbti;
 
-public enum Predefined 
+public enum Predefined
 {
 	Local("local"),
 	MavenLocal("maven-local"),
@@ -17,7 +17,7 @@ public enum Predefined
 		for(Predefined p : values())
 			if(s.equals(p.toString()))
 				return p;
-		
+
 		StringBuilder msg = new StringBuilder("Expected one of ");
 		for(Predefined p : values())
 			msg.append(p.toString()).append(", ");

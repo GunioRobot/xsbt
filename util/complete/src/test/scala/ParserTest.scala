@@ -52,7 +52,7 @@ object ParserTest extends Properties("Completing Parser")
 	def checkSingle(in: String, expect: Completion)(expectDisplay: Completion = expect) =
 		( ("token '" + in + "'") |: checkOne(in, nested, expect)) &&
 		( ("display '" + in + "'") |: checkOne(in, nestedDisplay, expectDisplay) )
-		
+
 	def checkOne(in: String, parser: Parser[_], expect: Completion): Prop =
 		p(completions(parser, in, 1)) == Completions.single(expect)
 
@@ -61,7 +61,7 @@ object ParserTest extends Properties("Completing Parser")
 		( ("display '" + in + "'") |: checkInv(in, nestedDisplay) )
 	def checkInv(in: String, parser: Parser[_]): Prop =
 		p(completions(parser, in, 1)) == Completions.nil
-	
+
 	property("nested tokens a") = checkSingle("", Completion.tokenStrict("","a1") )( Completion.displayStrict("<a1>"))
 	property("nested tokens a1") = checkSingle("a", Completion.tokenStrict("a","1") )( Completion.displayStrict("<a1>"))
 	property("nested tokens a inv") = checkInvalid("b")

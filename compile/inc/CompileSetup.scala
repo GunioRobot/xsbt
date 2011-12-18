@@ -33,12 +33,12 @@ object CompileSetup
 	implicit val equivOpts: Equiv[CompileOptions] = new Equiv[CompileOptions] {
 		def equiv(a: CompileOptions, b: CompileOptions) =
 			(a.options sameElements b.options) &&
-			(a.javacOptions sameElements b.javacOptions) 
+			(a.javacOptions sameElements b.javacOptions)
 	}
 	implicit val equivCompilerVersion: Equiv[String] = new Equiv[String] {
 		def equiv(a: String, b: String) = a == b
 	}
-	
+
 	implicit val equivOrder: Equiv[CompileOrder.Value] = new Equiv[CompileOrder.Value] {
 		def equiv(a: CompileOrder.Value, b: CompileOrder.Value) = a == b
 	}

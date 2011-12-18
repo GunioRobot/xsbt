@@ -19,7 +19,7 @@ object EvaluateTask
 	import std.{TaskExtra,Transform}
 	import TaskExtra._
 	import Keys.state
-	
+
 	val SystemProcessors = Runtime.getRuntime.availableProcessors
 	def defaultConfig(state: State): EvaluateConfig =
 		EvaluateConfig(false, restrictions(state))
@@ -105,7 +105,7 @@ object EvaluateTask
 		val str = std.Streams.closeable(structure.streams(state))
 		try { f(str) } finally { str.close() }
 	}
-	
+
 	def getTask[T](structure: BuildStructure, taskKey: ScopedKey[Task[T]], state: State, streams: Streams, ref: ProjectRef): Option[(Task[T], Execute.NodeView[Task])] =
 	{
 		val thisScope = Load.projectScope(ref)
@@ -119,7 +119,7 @@ object EvaluateTask
 	def runTask[T](root: Task[T], state: State, streams: Streams, triggers: Triggers[Task], config: EvaluateConfig)(implicit taskToNode: Execute.NodeView[Task]): (State, Result[T]) =
 	{
 			import ConcurrentRestrictions.{completionService, TagMap, Tag, tagged, tagsKey}
-	
+
 		val log = state.log
 		log.debug("Running task... Cancelable: " + config.cancelable + ", check cycles: " + config.checkCycles)
 		val tags = tagged[Task[_]](_.info get tagsKey getOrElse Map.empty, Tags.predicate(config.restrictions))
@@ -155,7 +155,7 @@ object EvaluateTask
 				case _ => Nil
 			}
 		)
-		
+
 	def transformInc[T](result: Result[T]): Result[T] =
 		// taskToKey needs to be before liftAnonymous.  liftA only lifts non-keyed (anonymous) Incompletes.
 		result.toEither.left.map { i => Incomplete.transformBU(i)(convertCyclicInc andThen taskToKey andThen liftAnonymous ) }

@@ -78,7 +78,7 @@ abstract class EvaluateSettings[Scope]
 	private[this] def workComplete(): Unit =
 		if(running.decrementAndGet() == 0)
 			complete.put( None )
-	
+
 	private[this] sealed abstract class INode[T]
 	{
 		private[this] var state: EvaluationState = New
@@ -89,7 +89,7 @@ abstract class EvaluateSettings[Scope]
 
 		override def toString = getClass.getName + " (state=" + state + ",blockedOn=" + blockedOn + ",calledBy=" + calledBy.size + ",blocking=" + blocking.size + "): " +
 			( (static.toSeq.flatMap { case (key, value) => if(value eq this) key.toString :: Nil else Nil }).headOption getOrElse "non-static")
-	
+
 		final def get: T = synchronized {
 			assert(value != null, toString + " not evaluated")
 			value
@@ -98,7 +98,7 @@ abstract class EvaluateSettings[Scope]
 			val ready = state == Evaluated
 			if(!ready) blocking += from
 			registerIfNew()
-			ready	
+			ready
 		}
 		final def isDone: Boolean = synchronized { state == Evaluated }
 		final def isNew: Boolean = synchronized { state == New }
@@ -114,7 +114,7 @@ abstract class EvaluateSettings[Scope]
 			else
 				state = Blocked
 		}
-	
+
 		final def schedule(): Unit = synchronized {
 			assert(state == New || state == Blocked, "Invalid state for schedule() call: " + toString)
 			state = Ready

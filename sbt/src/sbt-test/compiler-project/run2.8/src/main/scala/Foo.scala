@@ -23,7 +23,7 @@ class Foo {
 		val r = inter.interpret("$r_.value = " + code)
 		h.value
 	}
-	
+
 	private def classpath(name: String, loader: ClassLoader) =
 		Option(loader.getResource(name + ".class.path")).map { cp =>
 			Source.fromURL(cp).mkString

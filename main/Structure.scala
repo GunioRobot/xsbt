@@ -46,7 +46,7 @@ object InputTask
 		separate(Project value p)(action)
 	def separate[I,T](p: Initialize[State => Parser[I]])(action: Initialize[I => Task[T]]): Initialize[InputTask[T]] =
 		p.zipWith(action)((parser, act) => free(parser)(act))
-		
+
 	private[sbt] lazy val inputMap: Task[Map[AnyRef,Any]] = mktask { error("Internal sbt error: input map not substituted.") }
 
 	// This interface allows the Parser to be constructed using other Settings, but not Tasks (which is desired).
@@ -133,7 +133,7 @@ object Scoped
 		def in(p: Reference, c: ConfigKey, t: Scoped): Result  =  in(Select(p), Select(c), Select(t.key))
 		def in(p: ScopeAxis[Reference], c: ScopeAxis[ConfigKey], t: ScopeAxis[AttributeKey[_]]): Result = in( Scope(p, c, t, This) )
 	}
-	
+
 	def scopedSetting[T](s: Scope, k: AttributeKey[T]): SettingKey[T]  =  new SettingKey[T] { val scope = s; val key = k}
 	def scopedInput[T](s: Scope, k: AttributeKey[InputTask[T]]): InputKey[T]  =  new InputKey[T] { val scope = s; val key = k }
 	def scopedTask[T](s: Scope, k: AttributeKey[Task[T]]): TaskKey[T]  =  new TaskKey[T] { val scope = s; val key = k }
@@ -252,7 +252,7 @@ object Scoped
 
 	implicit def richFileSetting(s: SettingKey[File]): RichFileSetting = new RichFileSetting(s)
 	implicit def richFilesSetting(s: SettingKey[Seq[File]]): RichFilesSetting = new RichFilesSetting(s)
-	
+
 	final class RichFileSetting(s: SettingKey[File]) extends RichFileBase
 	{
 		def /(c: String): Initialize[File] = s { _ / c }
@@ -336,7 +336,7 @@ object Scoped
 				tasks flatMapR f
 		}
 	}
-	
+
 	// this is the least painful arrangement I came up with
 	implicit def t2ToTable2[A,B](t2: (ScopedTaskable[A], ScopedTaskable[B]) ): RichTaskable2[A,B] = new RichTaskable2(t2)
 	implicit def t3ToTable3[A,B,C](t3: (ScopedTaskable[A], ScopedTaskable[B], ScopedTaskable[C]) ): RichTaskable3[A,B,C] = new RichTaskable3(t3)
@@ -352,7 +352,7 @@ object Scoped
 	implicit def t13ToTable13[A,B,C,D,E,F,G,H,I,J,K,L,N](t13: (ScopedTaskable[A], ScopedTaskable[B], ScopedTaskable[C], ScopedTaskable[D], ScopedTaskable[E], ScopedTaskable[F], ScopedTaskable[G], ScopedTaskable[H], ScopedTaskable[I], ScopedTaskable[J], ScopedTaskable[K], ScopedTaskable[L], ScopedTaskable[N]) ): RichTaskable13[A,B,C,D,E,F,G,H,I,J,K,L,N] = new RichTaskable13(t13)
 	implicit def t14ToTable14[A,B,C,D,E,F,G,H,I,J,K,L,N,O](t14: (ScopedTaskable[A], ScopedTaskable[B], ScopedTaskable[C], ScopedTaskable[D], ScopedTaskable[E], ScopedTaskable[F], ScopedTaskable[G], ScopedTaskable[H], ScopedTaskable[I], ScopedTaskable[J], ScopedTaskable[K], ScopedTaskable[L], ScopedTaskable[N], ScopedTaskable[O]) ): RichTaskable14[A,B,C,D,E,F,G,H,I,J,K,L,N,O] = new RichTaskable14(t14)
 	implicit def t15ToTable15[A,B,C,D,E,F,G,H,I,J,K,L,N,O,P](t15: (ScopedTaskable[A], ScopedTaskable[B], ScopedTaskable[C], ScopedTaskable[D], ScopedTaskable[E], ScopedTaskable[F], ScopedTaskable[G], ScopedTaskable[H], ScopedTaskable[I], ScopedTaskable[J], ScopedTaskable[K], ScopedTaskable[L], ScopedTaskable[N], ScopedTaskable[O], ScopedTaskable[P]) ): RichTaskable15[A,B,C,D,E,F,G,H,I,J,K,L,N,O,P] = new RichTaskable15(t15)
-	
+
 	sealed abstract class RichTaskables[In <: HList](keys: KList[ScopedTaskable, In])
 	{
 		type App[T] = Initialize[Task[T]]

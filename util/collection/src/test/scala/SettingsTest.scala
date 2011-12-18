@@ -12,7 +12,7 @@ object SettingsTest extends Properties("settings")
 
 	property("Basic settings test") = secure( all( tests: _*) )
 
-	property("Basic chain") = forAll(chainLengthGen) { (i: Int) => 
+	property("Basic chain") = forAll(chainLengthGen) { (i: Int) =>
 		val abs = math.abs(i)
 		singleIntTest( chain( abs, value(0)), abs )
 	}
@@ -48,7 +48,7 @@ object SettingsTest extends Properties("settings")
 		catch { case e: Exception => true }
 	}
 
-	def tests = 
+	def tests =
 		for(i <- 0 to 5; k <- Seq(a, b)) yield {
 			val expected = expectedValues(2*i + (if(k == a) 0 else 1))
 			checkKey[Int]( ScopedKey( Scope(i), k ), expected, applied)
@@ -84,7 +84,7 @@ object SettingsTest extends Properties("settings")
 		try { make(settings)(delegates, scopeLocal, showFullKey) }
 		catch { case e => e.printStackTrace; throw e }
 }
-// This setup is a workaround for module synchronization issues 
+// This setup is a workaround for module synchronization issues
 final class CCR(intermediate: Int)
 {
 	lazy val top = iterate(value(intermediate), intermediate)

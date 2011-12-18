@@ -12,12 +12,12 @@ case class BasicVersion(major: Int, minor: Option[Int], micro: Option[Int], extr
 	requirePositive(minor)
 	requirePositive(micro)
 	require(isValidExtra(extra))
-	
+
 	def incrementMicro = BasicVersion(major, minor orElse Some(0), increment(micro), extra)
 	def incrementMinor = BasicVersion(major, increment(minor), micro, extra)
 	def incrementMajor = BasicVersion(major+1, minor, micro, extra)
 	def withExtra(newExtra: Option[String]) = BasicVersion(major, minor, micro, newExtra)
-	
+
 	override def toString = major +
 		minor.map(minorI => "." + minorI + micro.map(microI => "." + microI).getOrElse("")).getOrElse("") +
 			extra.map(x => "-" + x).getOrElse("")
@@ -31,7 +31,7 @@ object Version
 {
 	private[sbt] def increment(i: Option[Int]) = Some(i.getOrElse(0) + 1)
 	private[sbt] def requirePositive(i: Option[Int]) { i.foreach(x => require(x >= 0)) }
-	
+
 	import java.util.regex.Pattern
 	val versionPattern = Pattern.compile("""(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:-(.+))?""")
 	def fromString(v: String): Either[String, Version] =

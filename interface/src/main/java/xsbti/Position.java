@@ -14,5 +14,5 @@ public interface Position
 	Maybe<String> pointerSpace();
 
 	Maybe<String> sourcePath();
-	Maybe<java.io.File> sourceFile();	
+	Maybe<java.io.File> sourceFile();
 }

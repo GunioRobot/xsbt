@@ -6,7 +6,7 @@ package sbt
 	import jline.{Completor, ConsoleReader}
 	import java.io.File
 	import complete.Parser
-	
+
 abstract class JLine extends LineReader
 {
 	protected[this] val reader: ConsoleReader

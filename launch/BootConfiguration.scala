@@ -56,7 +56,7 @@ private object BootConfiguration
 	/** The Ivy pattern to use for retrieving the scala compiler and library.  It is relative to the directory
 	* containing all jars for the requested version of scala. */
 	val scalaRetrievePattern = ScalaDirectoryName + "/[artifact](-[classifier]).[ext]"
-	
+
 	def artifactType(classifier: String) =
 		classifier match
 		{
@@ -64,7 +64,7 @@ private object BootConfiguration
 			case "javadoc" => "doc"
 			case _ => "jar"
 		}
-		
+
 	/** The Ivy pattern to use for retrieving the application and its dependencies.  It is relative to the directory
 	* containing all jars for the requested version of scala. */
 	def appRetrievePattern(appID: xsbti.ApplicationID) = appDirectoryName(appID, "/") + "(/[component])/[artifact]-[revision](-[classifier]).[ext]"

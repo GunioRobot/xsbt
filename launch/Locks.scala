@@ -59,7 +59,7 @@ object Locks extends xsbti.GlobalLock
 				catch { case i: InternalLockNPE =>
 					if(retries > 0) withChannelRetries(retries - 1)(channel) else throw i
 				}
-				
+
 			def withChannel(channel: FileChannel) =
 			{
 				val freeLock = try { channel.tryLock } catch { case e: NullPointerException => throw new InternalLockNPE(e) }

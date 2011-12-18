@@ -10,7 +10,7 @@ object B extends Build
 
 	val sample = SettingKey[Int]("sample")
 	val check = TaskKey[Unit]("check")
-	
+
 	lazy val root = Project("root", file("."), settings = Nil)
 	lazy val sub = Project("sub", file("."), delegates = root :: Nil, configurations = newConfig :: Nil, settings = incSample :: checkTask(4) :: Nil)
 	override lazy val settings =
@@ -20,5 +20,5 @@ object B extends Build
 
 	def incSample = sample <<= sample in newConfig apply (_ + 1)
 	def checkTask(expected: Int) = check <<= sample in newConfig map ( i => assert(i == expected, "Expected " + expected + ", got " + i ) )
-	
+
 }

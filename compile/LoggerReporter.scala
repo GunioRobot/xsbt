@@ -44,7 +44,7 @@ object LoggerReporter
 			case _ => "" + n + " " + elements + "s"
 		}
 }
-	
+
 class LoggerReporter(maximumErrors: Int, log: Logger) extends xsbti.Reporter
 {
 	val positions = new mutable.HashMap[PositionKey, Severity]
@@ -52,7 +52,7 @@ class LoggerReporter(maximumErrors: Int, log: Logger) extends xsbti.Reporter
 	private val allProblems = new mutable.ListBuffer[Problem]
 
 	reset()
-	
+
 	def reset()
 	{
 		count.put(Warn, 0)
@@ -112,7 +112,7 @@ class LoggerReporter(maximumErrors: Int, log: Logger) extends xsbti.Reporter
 			}
 		}
 	}
-	
+
 	def log(pos: Position, msg: String, severity: Severity): Unit =
 	{
 		allProblems += problem(pos, msg, severity)

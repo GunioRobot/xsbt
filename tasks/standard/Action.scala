@@ -20,7 +20,7 @@ final case class Mapped[T, In <: HList](in: Tasks[In], f: Results[In] => T) exte
 final case class FlatMapped[T, In <: HList](in: Tasks[In], f: Results[In] => Task[T]) extends Action[T]
 /** A computation `in` that requires other tasks `deps` to be evaluated first.*/
 final case class DependsOn[T](in: Task[T], deps: Seq[Task[_]]) extends Action[T]
-/** A computation that operates on the results of a homogeneous list of other tasks. 
+/** A computation that operates on the results of a homogeneous list of other tasks.
 * It can either return another task to be evaluated or the final value.*/
 final case class Join[T, U](in: Seq[Task[U]], f: Seq[Result[U]] => Either[Task[T], T]) extends Action[T]
 

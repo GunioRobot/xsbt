@@ -37,10 +37,10 @@ object IvyRetrieve
 
 	def evicted(confReport: ConfigurationResolveReport): Seq[ModuleID] =
 		confReport.getEvictedNodes.map(node => toModuleID(node.getId))
- 
+
 	def toModuleID(revID: ModuleRevisionId): ModuleID =
 		ModuleID(revID.getOrganisation, revID.getName, revID.getRevision, extraAttributes = IvySbt.getExtraAttributes(revID))
-		
+
 	def toArtifact(art: IvyArtifact): Artifact =
 	{
 		import art._

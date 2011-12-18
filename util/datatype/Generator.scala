@@ -72,7 +72,7 @@ class ImmutableGenerator(pkgName: String, baseDir: File) extends GeneratorBase(p
 		"import java.util.List;\n" +
 		"public class " + c.name + c.parent.map(" extends " + _.name + " ").getOrElse(" implements java.io.Serializable") + "\n" +
 		"{\n\t" +
-			constructor + "\n\t" + 
+			constructor + "\n\t" +
 			(fields ++ accessors).mkString("\n\t") + "\n\t" +
 			toStringMethod(c) + "\n" +
 		"}\n"
@@ -118,7 +118,7 @@ class MutableGenerator(pkgName: String, baseDir: File) extends GeneratorBase(pkg
 			toStringMethod(c) + "\n" +
 		"}\n")
 	}
-	
+
 }
 object Generator
 {

@@ -11,7 +11,7 @@ object Level extends Enumeration
 	val Info = Value(2, "info")
 	val Warn = Value(3, "warn")
 	val Error = Value(4, "error")
-	/** Defines the label to use for success messages.  
+	/** Defines the label to use for success messages.
 	* Because the label for levels is defined in this module, the success label is also defined here. */
 	val SuccessLabel = "success"
 

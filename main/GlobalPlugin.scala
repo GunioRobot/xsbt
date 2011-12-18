@@ -21,7 +21,7 @@ object GlobalPlugin
 			resolvers <<= resolvers { rs => (rs ++ gp.resolvers).distinct },
 			internalDependencyClasspath in Runtime ~= { prev => (prev ++ gp.internalClasspath).distinct }
 		)
-	
+
 	def build(base: File, s: State, config: LoadBuildConfiguration): (BuildStructure, State) =
 	{
 		val globalConfig = config.copy(injectSettings = config.injectSettings.copy(global = config.injectSettings.global ++ globalPluginSettings))

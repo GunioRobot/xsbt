@@ -11,7 +11,7 @@ package sbt
 object Script
 {
 	final val Name = "script"
-	lazy val command = 
+	lazy val command =
 		Command.command(Name) { state =>
 			val scriptArg = state.remainingCommands.headOption getOrElse error("No script file specified")
 			val script = new File(scriptArg).getAbsoluteFile
@@ -31,7 +31,7 @@ object Script
 			val asScript = scalacOptions ++= Seq("-Xscript", script.getName.stripSuffix(".scala"))
 			val scriptSettings = Seq(asScript, scriptAsSource, logLevel in Global := Level.Warn, showSuccess in Global := false)
 			val append = Load.transformSettings(Load.projectScope(currentRef), currentRef.build, rootProject, scriptSettings ++ embeddedSettings)
-                   
+
 			val newStructure = Load.reapply(session.original ++ append, structure)
 			val arguments = state.remainingCommands.drop(1)
 			val newState = arguments.mkString("run ", " ", "") :: state.copy(remainingCommands = Nil)

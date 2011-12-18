@@ -19,7 +19,7 @@ object IncrementalCompile
 	def doCompile(compile: (Set[File], xsbti.AnalysisCallback) => Unit, internalMap: File => Option[File], externalAPI: (File, String) => Option[Source], current: ReadStamps, outputPath: File) = (srcs: Set[File]) => {
 		val callback = new AnalysisCallback(internalMap, externalAPI, current, outputPath)
 		compile(srcs, callback)
-		callback.get 
+		callback.get
 	}
 	def getExternalAPI(entry: String => Option[File], forEntry: File => Option[Analysis]): (File, String) => Option[Source] =
 	 (file: File,className: String) =>
@@ -40,9 +40,9 @@ private final class AnalysisCallback(internalMap: File => Option[File], external
 	val compilation = new xsbti.api.Compilation(time, outputPath.getAbsolutePath)
 
 	override def toString = ( List("APIs", "Binary deps", "Products", "Source deps") zip List(apis, binaryDeps, classes, sourceDeps)).map { case (label, map) => label + "\n\t" + map.mkString("\n\t") }.mkString("\n")
-	
+
 	import collection.mutable.{HashMap, HashSet, ListBuffer, Map, Set}
-	
+
 	private[this] val apis = new HashMap[File, (Int, SourceAPI)]
 	private[this] val binaryDeps = new HashMap[File, Set[File]]
 		 // source file to set of generated (class file, class name)
@@ -92,17 +92,17 @@ private final class AnalysisCallback(internalMap: File => Option[File], external
 				// dependency is some other binary on the classpath
 				externalBinaryDependency(classFile, name, source)
 		}
-		
+
 	def generatedClass(source: File, module: File, name: String) =
 	{
 		add(classes, source, (module, name))
 		classToSource.put(module, source)
 	}
-	
+
 	def api(sourceFile: File, source: SourceAPI) { apis(sourceFile) = (xsbt.api.HashAPI(source), xsbt.api.APIUtil.minimize(source)) }
 	def endSource(sourcePath: File): Unit =
 		assert(apis.contains(sourcePath))
-	
+
 	def get: Analysis = addExternals( addBinaries( addProducts( addSources(Analysis.Empty) ) ) )
 	def addProducts(base: Analysis): Analysis = addAll(base, classes) { case (a, src, (prod, name)) => a.addProduct(src, prod, current product prod, name ) }
 	def addBinaries(base: Analysis): Analysis = addAll(base, binaryDeps)( (a, src, bin) => a.addBinaryDep(src, bin, binaryClassName(bin), current binary bin) )
@@ -114,7 +114,7 @@ private final class AnalysisCallback(internalMap: File => Option[File], external
 			a.addSource(src, s, stamp, sourceDeps.getOrElse(src, Nil: Iterable[File]))
 		}
 	def addExternals(base: Analysis): Analysis = (base /: extSrcDeps) { case (a, (source, name, api)) => a.addExternalDep(source, name, api) }
-		
+
 	def addAll[A,B](base: Analysis, m: Map[A, Set[B]])( f: (Analysis, A, B) => Analysis): Analysis =
 		(base /: m) { case (outer, (a, bs)) =>
 			(outer /: bs) { (inner, b) =>

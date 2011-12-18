@@ -16,26 +16,26 @@ object CheckStash extends Specification
 			stash(Set()) { }
 			true must beTrue
 		}
-		
+
 		"move files during execution" in {
 			WithFiles(TestFiles : _*) ( checkMove )
 		}
-		
+
 		"restore files on exceptions but not errors" in {
 			WithFiles(TestFiles : _*) ( checkRestore )
 		}
 	}
-	
+
 	def checkRestore(seq: Seq[File])
 	{
-		allCorrect(seq) 
-		
+		allCorrect(seq)
+
 		stash0(seq, throw new TestRuntimeException) must beFalse
 		allCorrect(seq)
-		
+
 		stash0(seq, throw new TestException) must beFalse
 		allCorrect(seq)
-		
+
 		stash0(seq, throw new TestError) must beFalse
 		noneExist(seq)
 	}
@@ -57,7 +57,7 @@ object CheckStash extends Specification
 		catch {
 			case _: TestError | _: TestException | _: TestRuntimeException => false
 		}
-	
+
 	def allCorrect(s: Seq[File]) = (s.toList zip TestFiles.toList).foreach((correct _).tupled)
 	def correct(check: File, ref: (File, String)) =
 	{
@@ -65,7 +65,7 @@ object CheckStash extends Specification
 		read(check) must beEqual(ref._2)
 	}
 	def noneExist(s: Seq[File]) = s.forall(!_.exists) must beTrue
-	
+
 	lazy val TestFiles =
 		Seq(
 			"a/b/c" -> "content1",

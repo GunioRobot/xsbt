@@ -54,7 +54,7 @@ object Cross
 			import x._
 		crossScalaVersions in currentRef get structure.data getOrElse Nil
 	}
-	
+
 	def requireSession[T](p: State => Parser[T]): State => Parser[T] = s =>
 		if(s get sessionSettings isEmpty) failure("No project loaded") else p(s)
 

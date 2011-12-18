@@ -42,7 +42,7 @@ object ConfigurationParser
 		m.appendTail(b)
 		b.toString
 	}
-	
+
 	implicit val readIDs = ids _
 }
 class ConfigurationParser
@@ -85,11 +85,11 @@ class ConfigurationParser
 		process(m, "classifiers", processClassifiers(label))
 	def processClassifiers(label: String)(value: Option[String]): Value[List[String]] =
 		value.map(readValue[List[String]](label)) getOrElse new Explicit(Nil)
-		
+
 	def getVersion(m: LabelMap, label: String, defaultName: String): (Value[String], LabelMap) = process(m, "version", processVersion(label, defaultName))
 	def processVersion(label: String, defaultName: String)(value: Option[String]): Value[String] =
 		value.map(readValue[String](label)).getOrElse(new Implicit(defaultName, None))
-		
+
 	def readValue[T](label: String)(implicit read: String => T): String => Value[T] = value =>
 	{
 		if(isEmpty(value)) error(label + " cannot be empty (omit declaration to use the default)")
@@ -114,7 +114,7 @@ class ConfigurationParser
 		val (b, m) = id(map, name, default.toString)
 		(toBoolean(b), m)
 	}
-		
+
 	def toFiles(paths: List[String]): List[File] = paths.map(toFile)
 	def toFile(path: String): File = new File(substituteVariables(path).replace('/', File.separatorChar))// if the path is relative, it will be resolved by Launch later
 	def file(map: LabelMap, name: String, default: File): (File, LabelMap) =
@@ -260,7 +260,7 @@ object ParseLine
 				case x => new Labeled(x.mkString, None)
 			}
 		}
-		
+
 		if(isEmpty(trimmed)) Nil
 		else
 		{

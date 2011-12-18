@@ -23,7 +23,7 @@ private[sbt] class TestStatusReporter(path: Path, log: Logger) extends TestsList
 	}
 	def doComplete(finalResult: Result.Value) { complete() }
 	def doComplete(t: Throwable) { complete() }
-	
+
 	private def complete()
 	{
 		TestStatus.write(succeeded, "Successful Tests", path, log)

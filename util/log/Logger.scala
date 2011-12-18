@@ -74,11 +74,11 @@ trait Logger extends xLogger
 	final def error(message: => String): Unit = log(Level.Error, message)
 
 	def ansiCodesSupported = false
-	
+
 	def trace(t: => Throwable): Unit
 	def success(message: => String): Unit
 	def log(level: Level.Value, message: => String): Unit
-	
+
 	def debug(msg: F0[String]): Unit = log(Level.Debug, msg)
 	def warn(msg: F0[String]): Unit = log(Level.Warn, msg)
 	def info(msg: F0[String]): Unit = log(Level.Info, msg)

@@ -25,7 +25,7 @@ object Transform
 	def transformMappings = (inputResources, inputResourceDirectories, resourceManaged) map { (rs, rdirs, rm) =>
 		(rs --- rdirs) x (rebase(rdirs, rm)|flat(rm)) toSeq
 	}
-	def defineProperties = 
+	def defineProperties =
 		 (organization, version, scalaVersion, Status.isSnapshot) map { (org, v, sv, isSnapshot) =>
 		 	Map("org" -> org, "sbt.version" -> v, "scala.version" -> sv, "repositories" -> repositories(isSnapshot).mkString(IO.Newline))
 		}

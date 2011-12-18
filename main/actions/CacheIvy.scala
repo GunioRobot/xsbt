@@ -103,7 +103,7 @@ object CacheIvy
 	implicit def inlineIvyIC: InputCache[InlineIvyConfiguration] = wrapIn
 	implicit def moduleSettingsIC: InputCache[ModuleSettings] =
 		unionInputCache[ModuleSettings, PomConfiguration :+: InlineConfiguration :+: EmptyConfiguration :+: IvyFileConfiguration :+: HNil]
-		
+
 	implicit def ivyConfigurationIC: InputCache[IvyConfiguration] =
 		unionInputCache[IvyConfiguration, InlineIvyConfiguration :+: ExternalIvyConfiguration :+: HNil]
 

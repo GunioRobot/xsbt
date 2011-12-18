@@ -33,7 +33,7 @@ object ScriptedPlugin extends Plugin {
 
 	def scriptedRunTask: Initialize[Task[Method]] = (scriptedTests) map {
 		(m) =>
-		m.getClass.getMethod("run", classOf[File], classOf[Boolean], classOf[String], classOf[String], classOf[String], classOf[Array[String]], classOf[File]) 
+		m.getClass.getMethod("run", classOf[File], classOf[Boolean], classOf[String], classOf[String], classOf[String], classOf[Array[String]], classOf[File])
 	}
 
 	def scriptedTask: Initialize[InputTask[Unit]] = InputTask(_ => complete.Parsers.spaceDelimited("<arg>")) { result =>

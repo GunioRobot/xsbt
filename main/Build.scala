@@ -45,7 +45,7 @@ object RetrieveUnit
 			case "git" => gitApply(tmp, base)
 			case _ if isGitPath(base.getPath) => gitApply(tmp, base)
 			case "http" | "https" => Some { () => downloadAndExtract(base, tmp); tmp }
-			case "file" => 
+			case "file" =>
 				val f = new File(base)
 				if(f.isDirectory)
 				{
@@ -94,8 +94,8 @@ object RetrieveUnit
 	def gitClone(base: URI, tempDir: File): Unit =
                 git("clone" :: dropFragment(base).toASCIIString :: tempDir.getAbsolutePath :: Nil, tempDir) ;
 	def gitCheckout(tempDir: File, branch: String): Unit =
-		git("checkout" :: "-q" :: branch :: Nil, tempDir)		
-        def git(args: List[String], cwd: File): Unit = 
+		git("checkout" :: "-q" :: branch :: Nil, tempDir)
+        def git(args: List[String], cwd: File): Unit =
 		if(isWindowsShell) run(List("cmd", "/c", "git") ++ args, cwd)
 		else run("git" +: args, cwd)
 	lazy val isWindowsShell = {
@@ -183,7 +183,7 @@ object Index
 		settings.flatMap(s => if(s.key.key.isLocal) Nil else s.key +: s.dependencies).filter(!_.key.isLocal).toSet
 	def attributeKeys(settings: Settings[Scope]): Set[AttributeKey[_]] =
 		settings.data.values.flatMap(_.keys).toSet[AttributeKey[_]]
-	def stringToKeyMap(settings: Set[AttributeKey[_]]): Map[String, AttributeKey[_]] =	
+	def stringToKeyMap(settings: Set[AttributeKey[_]]): Map[String, AttributeKey[_]] =
 	{
 		val multiMap = settings.groupBy(_.label)
 		val duplicates = multiMap collect { case (k, xs) if xs.size > 1 => (k, xs.map(_.manifest)) } collect { case (k, xs) if xs.size > 1 => (k, xs) }
@@ -217,14 +217,14 @@ object BuildStreams
 		import std.{TaskExtra,Transform}
 		import Path._
 		import BuildPaths.outputDirectory
-	
+
 	final val GlobalPath = "$global"
 	final val BuildUnitPath = "$build"
 	final val StreamsDirectory = "streams"
 
 	def mkStreams(units: Map[URI, LoadedBuildUnit], root: URI, data: Settings[Scope]): State => Streams = s =>
 		std.Streams( path(units, root, data), displayFull, LogManager.construct(data, s) )
-		
+
 	def path(units: Map[URI, LoadedBuildUnit], root: URI, data: Settings[Scope])(scoped: ScopedKey[_]): File =
 		resolvePath( projectPath(units, root, scoped, data), nonProjectPath(scoped) )
 
@@ -257,7 +257,7 @@ object BuildStreams
 			case Select(pr) => error("Unresolved project reference (" + pr + ") in " + displayFull(scoped))
 			case This => error("Unresolved project reference (This) in " + displayFull(scoped))
 		}
-		
+
 	def refTarget(ref: ResolvedReference, fallbackBase: File, data: Settings[Scope]): File =
 		refTarget(GlobalScope.copy(project = Select(ref)), fallbackBase, data)
 	def refTarget(scope: Scope, fallbackBase: File, data: Settings[Scope]): File =
@@ -271,12 +271,12 @@ object BuildPaths
 	def systemGlobalBase: Option[File] = Option(System.getProperty(GlobalBaseProperty)) flatMap { path =>
 		if(path.isEmpty) None else Some(new File(path))
 	}
-		
+
 	def defaultGlobalBase = Path.userHome / ConfigDirectoryName
 	def defaultStaging(globalBase: File) = globalBase / "staging"
 	def defaultGlobalPlugins(globalBase: File) = globalBase / PluginsDirectoryName
 	def defaultGlobalSettings(globalBase: File) = configurationSources(globalBase)
-	
+
 	def definitionSources(base: File): Seq[File] = (base * "*.scala").get
 	def configurationSources(base: File): Seq[File] = (base * (GlobFilter("*.sbt") - ".sbt")).get
 	def pluginDirectory(definitionBase: File) = definitionBase / PluginsDirectoryName

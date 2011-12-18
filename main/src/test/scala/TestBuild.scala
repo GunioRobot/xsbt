@@ -21,7 +21,7 @@ object TestBuild
 	val MaxIDSize = 10
 	val MaxDeps = 10
 	val KeysPerEnv = 25
-	
+
 	val MaxTasksGen = chooseShrinkable(1, MaxTasks)
 	val MaxProjectsGen = chooseShrinkable(1, MaxProjects)
 	val MaxConfigsGen = chooseShrinkable(1, MaxConfigs)
@@ -104,14 +104,14 @@ object TestBuild
 	}
 	final class Taskk(val key: AttributeKey[String], val delegates: Seq[Taskk])
 	{
-		override def toString = key.label + " (delegates: " + delegates.map(_.key.label).mkString(", ")  + ")"	
+		override def toString = key.label + " (delegates: " + delegates.map(_.key.label).mkString(", ")  + ")"
 	}
 
 	def mapBy[K, T](s: Seq[T])(f: T => K): Map[K, T] = s map { t => (f(t), t) } toMap;
 
 	implicit lazy val arbKeys: Arbitrary[Keys] = Arbitrary(keysGen)
 	lazy val keysGen: Gen[Keys] = for(env <- mkEnv; keyCount <- chooseShrinkable(1, KeysPerEnv); keys <- listOfN(keyCount, scope(env)) ) yield new Keys(env, keys)
-	
+
 	def scope(env: Env): Gen[Scope] =
 		for {
 			build <- oneOf(env.builds)
@@ -162,7 +162,7 @@ object TestBuild
 	implicit def envGen(implicit bGen: Gen[Build], tasks: Gen[Seq[Taskk]]): Gen[Env] =
 		for(i <- MaxBuildsGen; bs <- listOfN(i, bGen); ts <- tasks) yield new Env(bs, ts)
 	implicit def buildGen(implicit uGen: Gen[URI], pGen: URI => Gen[Seq[Proj]]): Gen[Build] = for(u <- uGen; ps <- pGen(u)) yield new Build(u, ps)
-	
+
 	def nGen[T](igen: Gen[Int])(implicit g: Gen[T]): Gen[List[T]] = igen flatMap { ig => listOfN(ig, g) }
 
 	implicit def genProjects(build: URI)(implicit genID: Gen[String], maxDeps: Gen[Int], count: Gen[Int], confs: Gen[Seq[Config]]): Gen[Seq[Proj]] =

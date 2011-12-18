@@ -68,7 +68,7 @@ trait BasicCacheImplicits
 	def basicInput[I](implicit eq: Equiv[I], fmt: Format[I]): InputCache[I] = InputCache.basicInputCache(fmt, eq)
 
 	def defaultEquiv[T]: Equiv[T] = new Equiv[T] { def equiv(a: T, b: T) = a == b }
-	
+
 	implicit def optInputCache[T](implicit t: InputCache[T]): InputCache[Option[T]] =
 		new InputCache[Option[T]]
 		{
@@ -86,7 +86,7 @@ trait BasicCacheImplicits
 			}
 			def equiv = optEquiv(t.equiv)
 		}
-		
+
 	def wrapEquiv[S,T](f: S => T)(implicit eqT: Equiv[T]): Equiv[S] =
 		new Equiv[S] {
 			def equiv(a: S, b: S) =
@@ -114,7 +114,7 @@ trait BasicCacheImplicits
 		val fromBytes = (bs: Array[Byte]) => f(new ByteArrayInputStream(bs))
 		wrap(toBytes, fromBytes)(DefaultProtocol.ByteArrayFormat)
 	}
-	
+
 	implicit def xmlInputCache(implicit strEq: InputCache[String]): InputCache[NodeSeq] = wrapIn[NodeSeq, String](_.toString, strEq)
 
 	implicit def seqCache[T](implicit t: InputCache[T]): InputCache[Seq[T]] =
@@ -150,7 +150,7 @@ trait BasicCacheImplicits
 		}
 	implicit def seqFormat[T](implicit t: Format[T]): Format[Seq[T]] =
 		wrap[Seq[T], List[T]](_.toList, _.toSeq)(DefaultProtocol.listFormat)
-	
+
 	def wrapIn[I,J](implicit f: I => J, jCache: InputCache[J]): InputCache[I] =
 		new InputCache[I]
 		{
@@ -192,7 +192,7 @@ trait HListCacheImplicits
 					tail.equiv.equiv(a._2, b._2)
 			}
 		}
-		
+
 	implicit def hNilCache: InputCache[HNil] = Cache.singleton(HNil : HNil)
 
 	implicit def hConsFormat[H, T <: HList](implicit head: Format[H], tail: Format[T]): Format[H :+: T] = new Format[H :+: T] {

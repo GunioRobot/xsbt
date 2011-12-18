@@ -24,7 +24,7 @@ object CompileTest extends Specification
 			testClasspath("2.8.0")
 		}
 	}
-	
+
 	private def testCompileAnalysis(compiler: AnalyzingCompiler, log: Logger)
 	{
 		WithFiles( new File("Test.scala") -> "object Test" ) { sources =>
@@ -35,9 +35,9 @@ object CompileTest extends Specification
 			}
 		}
 	}
-	
+
 	val UsingCompiler = "object Test { classOf[scala.tools.nsc.Global] }"
-	
+
 	private def shouldFail(act: => Unit) =
 	{
 		val success = try { act; true } catch { case t if expectedException(t) => false }
@@ -60,27 +60,27 @@ object CompileTest extends Specification
 				new RawCompiler(ScalaInstance(scalaVersion, launch), new ClasspathOptions(bootLibrary, compilerOnClasspath, true, true, bootLibrary), log)
 
 			val callback = new xsbti.TestCallback
-				
+
 			val standard = compiler(true, true)
 			val noCompiler = compiler(true, false)
 			val fullExplicit = compiler(false, false)
-			
+
 			val fullBoot = "-bootclasspath" :: fullExplicit.compilerArguments.createBootClasspath :: Nil
 			val withCompiler = noCompiler.scalaInstance.compilerJar :: Nil
 			val withLibrary = noCompiler.scalaInstance.libraryJar :: Nil
 			val withLibraryCompiler = withLibrary ++ withCompiler
-			
+
 			WithFiles( new File("Test.scala") -> "object Test", new File("Test2.scala") -> UsingCompiler ) { case Seq(plain, useCompiler) =>
 				val plainSrcs = Seq[File](plain)
 				val compSrcs = Seq[File](useCompiler)
 				withTemporaryDirectory { out =>
 					shouldSucceed( standard(plainSrcs, Nil,  out, Nil) )
 					shouldSucceed( standard(compSrcs, Nil,  out, Nil) )
-					
+
 					shouldSucceed( noCompiler(plainSrcs, Nil,  out, Nil) )
 					shouldFail( noCompiler(compSrcs, Nil,  out, Nil) )
 					shouldSucceed( noCompiler(compSrcs, withCompiler, out, Nil) )
-					
+
 					shouldFail( fullExplicit(plainSrcs, Nil, out, Nil) )
 					shouldFail( fullExplicit(compSrcs, Nil, out, Nil) )
 					shouldSucceed( fullExplicit(plainSrcs, withLibrary, out, fullBoot) )

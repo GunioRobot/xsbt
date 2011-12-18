@@ -92,7 +92,7 @@ class Visit
 	def visitPrivate(p: Private) { visitQualifier(p.qualifier) }
 	def visitProtected(p: Protected) { visitQualifier(p.qualifier) }
 	def visitModifiers(m: Modifiers) {}
-	
+
 	def visitValueParameters(valueParameters: Seq[ParameterList]) = valueParameters foreach visitValueParameterList
 	def visitValueParameterList(list: ParameterList) = list.parameters foreach visitValueParameter
 	def visitValueParameter(parameter: MethodParameter) =
@@ -100,7 +100,7 @@ class Visit
 		visitString(parameter.name)
 		visitType(parameter.tpe)
 	}
-		
+
 	def visitParameterizedDefinition[T <: ParameterizedDefinition](d: T)
 	{
 		visitTypeParameters(d.typeParameters)
@@ -116,7 +116,7 @@ class Visit
 		visitParameterizedDefinition(d)
 		visitType(d.tpe)
 	}
-	
+
 	def visitTypeParameters(parameters: Seq[TypeParameter]) = parameters foreach visitTypeParameter
 	def visitTypeParameter(parameter: TypeParameter)
 	{
@@ -137,7 +137,7 @@ class Visit
 		visitString(arg.name)
 		visitString(arg.value)
 	}
-	
+
 	def visitTypes(ts: Seq[Type]) = ts.foreach(visitType)
 	def visitType(t: Type)
 	{
@@ -155,7 +155,7 @@ class Visit
 			case pr: ParameterRef => visitParameterRef(pr)
 		}
 	}
-	
+
 	def visitEmptyType() {}
 	def visitParameterRef(p: ParameterRef) {}
 	def visitSingleton(s: Singleton) { visitPath(s.path) }

@@ -53,7 +53,7 @@ class AggressiveCompile(cacheDirectory: File)
 		val cArgs = new CompilerArguments(compiler.scalaInstance, compiler.cp)
 		val searchClasspath = explicitBootClasspath(options.options) ++ withBootclasspath(cArgs, absClasspath)
 		val entry = Locate.entry(searchClasspath, definesClass)
-		
+
 		val compile0 = (include: Set[File], callback: AnalysisCallback) => {
 			IO.createDirectory(outputDirectory)
 			val incSrc = sources.filter(include)
@@ -78,7 +78,7 @@ class AggressiveCompile(cacheDirectory: File)
 				}
 			if(order == JavaThenScala) { compileJava(); compileScala() } else { compileScala(); compileJava() }
 		}
-		
+
 		val sourcesSet = sources.toSet
 		val analysis = previousSetup match {
 			case Some(previous) if equiv.equiv(previous, currentSetup) => previousAnalysis

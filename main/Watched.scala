@@ -30,8 +30,8 @@ object Watched
 	def clearScreen: String = "\033[2J\033[0;0H"
 
 	private[this] class AWatched extends Watched
-	
-	def multi(base: Watched, paths: Seq[Watched]): Watched = 
+
+	def multi(base: Watched, paths: Seq[Watched]): Watched =
 		new AWatched
 		{
 			override def watchPaths(s: State) = (base.watchPaths(s) /: paths)(_ ++ _.watchPaths(s))
@@ -41,7 +41,7 @@ object Watched
 			override def triggeredMessage(s: WatchState) = base.triggeredMessage(s)
 		}
 	def empty: Watched = new AWatched
-		
+
 	val PollDelayMillis = 500
 	def isEnter(key: Int): Boolean = key == 10 || key == 13
 	def printIfDefined(msg: String) = if(!msg.isEmpty) System.out.println(msg)

@@ -67,7 +67,7 @@ object Task
 		//def joinR[T](f: Iterable[Result[S]] => T): Task[Iterable[Result[T]]] = new Mapped( MList.fromTCList[Task](in), ml => f(ml.toList))
 		def reduced(f: (S,S) => S): Task[S] = Task.reduced(in.toIndexedSeq, f)
 	}
-	
+
 
 	implicit def multInputTask[In <: HList](tasks: Tasks[In]): MultiInTask[In] = new MultiInTask[In] {
 		def flatMap[T](f: In => Task[T]): Task[T] = new FlatMapAll(tasks, f)
@@ -134,11 +134,11 @@ object Task
 	}
 	def failuresM[In <: HList]: Results[In] => Seq[Incomplete] = x => failures[Any](x.toList)
 	def failures[A]: Seq[Result[A]] => Seq[Incomplete] = _.collect { case Inc(i) => i }
-	
+
 	def run[T](root: Task[T], checkCycles: Boolean, maxWorkers: Int): Result[T] =
 	{
 		val (service, shutdown) = CompletionService[Task[_], Completed](maxWorkers)
-		
+
 		val x = new Execute[Task](checkCycles, Execute.noTriggers)(taskToNode)
 		try { x.run(root)(service) } finally { shutdown() }
 	}
@@ -147,11 +147,11 @@ object Task
 			case Value(v) => v
 			case Inc(i) => throw i
 		}
-		
+
 	def reduced[S](i: IndexedSeq[Task[S]], f: (S, S) => S): Task[S] =
 		i match
 		{
-			case Seq() => error("Cannot reduce empty sequence") 
+			case Seq() => error("Cannot reduce empty sequence")
 			case Seq(x) => x
 			case Seq(x, y) => reducePair(x, y, f)
 			case z =>

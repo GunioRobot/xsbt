@@ -21,7 +21,7 @@ object Tracked
 	/** Creates a tracker that only evaluates a function when the input has changed.*/
 	//def changed[O](cacheFile: File)(implicit format: Format[O], equiv: Equiv[O]): Changed[O] =
 	//	new Changed[O](cacheFile)
-	
+
 	/** Creates a tracker that provides the difference between a set of input files for successive invocations.*/
 	def diffInputs(cache: File, style: FilesInfo.Style): Difference =
 		Difference.inputs(cache, style)
@@ -43,7 +43,7 @@ object Tracked
 		val conv = help.convert(in)
 		val changed = help.changed(cacheFile, conv)
 		val result = f(changed, in)
-		
+
 		if(changed)
 			help.save(cacheFile, conv)
 
@@ -55,7 +55,7 @@ object Tracked
 		val help = new CacheHelp(ic)
 		val changed = help.changed(cacheFile, help.convert(initial))
 		val result = f(changed, initial)
-		
+
 		if(changed)
 			help.save(cacheFile, help.convert(in()))
 
@@ -142,22 +142,22 @@ class Difference(val cache: File, val style: FilesInfo.Style, val defineClean: B
 		clearCache()
 	}
 	private def clearCache() = delete(cache)
-	
+
 	private def cachedFilesInfo = fromFile(style.formats, style.empty)(cache)(style.manifest).files
 	private def raw(fs: Set[style.F]): Set[File] =  fs.map(_.file)
-	
+
 	def apply[T](files: Set[File])(f: ChangeReport[File] => T): T =
 	{
 		val lastFilesInfo = cachedFilesInfo
 		apply(files, lastFilesInfo)(f)(_ => files)
 	}
-	
+
 	def apply[T](f: ChangeReport[File] => T)(implicit toFiles: T => Set[File]): T =
 	{
 		val lastFilesInfo = cachedFilesInfo
 		apply(raw(lastFilesInfo), lastFilesInfo)(f)(toFiles)
 	}
-	
+
 	private def abs(files: Set[File]) = files.map(_.getAbsoluteFile)
 	private[this] def apply[T](files: Set[File], lastFilesInfo: Set[style.F])(f: ChangeReport[File] => T)(extractFiles: T => Set[File]): T =
 	{
@@ -183,10 +183,10 @@ class Difference(val cache: File, val style: FilesInfo.Style, val defineClean: B
 
 object FileFunction {
 	type UpdateFunction = (ChangeReport[File], ChangeReport[File]) => Set[File]
-	
+
 	def cached(cacheBaseDirectory: File, inStyle: FilesInfo.Style = FilesInfo.lastModified, outStyle: FilesInfo.Style = FilesInfo.exists)(action: Set[File] => Set[File]): Set[File] => Set[File] =
 		cached(cacheBaseDirectory)(inStyle, outStyle)( (in, out) => action(in.checked) )
-	
+
 	def cached(cacheBaseDirectory: File)(inStyle: FilesInfo.Style, outStyle: FilesInfo.Style)(action: UpdateFunction): Set[File] => Set[File] =
 	{
 		import Path._

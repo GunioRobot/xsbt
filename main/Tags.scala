@@ -14,7 +14,7 @@ object Tags
 	val Test = Tag("test")
 	val Update = Tag("update")
 	val Publish = Tag("publish")
-	
+
 	val CPU = Tag("cpu")
 	val Network = Tag("network")
 	val Disk = Tag("disk")
@@ -33,7 +33,7 @@ object Tags
 	}
 	private[this] final class Sum(tags: Seq[Tag], max: Int) extends Rule {
 		checkMax(max)
-		def apply(m: TagMap) = (0 /: tags)((sum, t) => sum + getInt(m, t)) <= max		
+		def apply(m: TagMap) = (0 /: tags)((sum, t) => sum + getInt(m, t)) <= max
 	}
 	private[this] def checkMax(max: Int): Unit = assert(max >= 1, "Limit must be at least 1.")
 

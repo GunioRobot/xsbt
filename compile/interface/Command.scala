@@ -20,7 +20,7 @@ object Command
 			constr(classOf[List[_]], classOf[Settings], classOf[Function1[_, _]], classOf[Boolean]).newInstance(arguments, settings, error _, false.asInstanceOf[AnyRef])
 		}
 	}
-	
+
 	def getWarnFatal(settings: Settings): Boolean =
 		settings.Xwarnfatal.value
 }

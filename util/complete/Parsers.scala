@@ -37,7 +37,7 @@ trait Parsers
 	def isOpType(cat: Int) = cat match { case MATH_SYMBOL | OTHER_SYMBOL | DASH_PUNCTUATION | OTHER_PUNCTUATION | MODIFIER_SYMBOL | CURRENCY_SYMBOL => true; case _ => false }
 	def isIDChar(c: Char) = c.isLetterOrDigit || c == '-' || c == '_'
 	def isDelimiter(c: Char) = c match { case '`' | '\'' | '\"' | /*';' | */',' | '.' => true ; case _ => false }
-	
+
 	lazy val NotSpaceClass = charClass(!_.isWhitespace, "non-whitespace character")
 	lazy val SpaceClass = charClass(_.isWhitespace, "whitespace character")
 	lazy val NotSpace = NotSpaceClass.+.string
@@ -50,7 +50,7 @@ trait Parsers
 
 	// TODO: implement
 	def fileParser(base: File): Parser[File] = token(mapOrFail(NotSpace)(s => new File(s.mkString)), "<file>")
-	
+
 	lazy val Port = token(IntBasic, "<port>")
 	lazy val IntBasic = mapOrFail( '-'.? ~ Digit.+ )( Function.tupled(toInt) )
 	lazy val NatBasic = mapOrFail( Digit.+ )( _.mkString.toInt )

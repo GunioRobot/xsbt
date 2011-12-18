@@ -30,7 +30,7 @@ object TopLevel
 
 		val (avalues, atypes) = definitions(a)
 		val (bvalues, btypes) = definitions(b)
-		
+
 		val (newTypes, removedTypes) = changes(names(atypes), names(btypes))
 		val (newTerms, removedTerms) = changes(names(avalues), names(bvalues))
 
@@ -47,7 +47,7 @@ object SameAPI
 	def apply(a: SourceAPI, b: SourceAPI): Boolean =
 	{
 		val start = System.currentTimeMillis
-		
+
 		/*println("\n=========== API #1 ================")
 		import DefaultShowAPI._
 		println(ShowAPI.show(a))
@@ -222,7 +222,7 @@ class SameAPI(tagsA: TypeVars, tagsB: TypeVars, includePrivate: Boolean, include
 		argumentMap(a) == argumentMap(b)
 	def argumentMap(a: Seq[AnnotationArgument]): Map[String,String] =
 		Map() ++ a.map(arg => (arg.name, arg.value))
-		
+
 	def sameDefinitionSpecificAPI(a: Definition, b: Definition): Boolean =
 		(a, b) match
 		{

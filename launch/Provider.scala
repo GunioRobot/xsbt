@@ -22,7 +22,7 @@ trait Provider
 	def classpath: Array[File] = Provider.getJars(baseDirectories)
 	def fullClasspath:Array[File] = concat(classpath, extraClasspath)
 
-	def reason: String = ""		
+	def reason: String = ""
 	def retrieveFailed: Nothing = fail("")
 	def retrieveCorrupt(missing: Iterable[String]): Nothing = fail(": missing " + missing.mkString(", "))
 	private def fail(extra: String) =

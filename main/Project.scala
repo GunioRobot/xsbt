@@ -131,7 +131,7 @@ object Project extends Init[Scope] with ProjectExtra
 		lazy val dependencies = dependencies0
 		lazy val delegates = delegates0
 		lazy val settings = settings0
-	
+
 		Dag.topologicalSort(configurations)(_.extendsConfigs) // checks for cyclic references here instead of having to do it in Scope.delegates
 	}
 
@@ -259,7 +259,7 @@ object Project extends Init[Scope] with ProjectExtra
 	def details(structure: BuildStructure, actual: Boolean, scope: Scope, key: AttributeKey[_])(implicit display: Show[ScopedKey[_]]): String =
 	{
 		val scoped = ScopedKey(scope,key)
-		
+
 		val data = scopedKeyData(structure, scope, key) map {_.description} getOrElse {"No entry for key."}
 		val description = key.description match { case Some(desc) => "Description:\n\t" + desc + "\n"; case None => "" }
 		val definedIn = structure.data.definingScope(scope, key) match {
@@ -345,7 +345,7 @@ object Project extends Init[Scope] with ProjectExtra
 	import DefaultParsers._
 
 	val loadActionParser = token(Space ~> ("plugins" ^^^ Plugins | "return" ^^^ Return)) ?? Current
-	
+
 	val ProjectReturn = AttributeKey[List[File]]("project-return", "Maintains a stack of builds visited using reload.")
 	def projectReturn(s: State): List[File] = s.attributes get ProjectReturn getOrElse Nil
 	def setProjectReturn(s: State, pr: List[File]): State = s.copy(attributes = s.attributes.put( ProjectReturn, pr) )

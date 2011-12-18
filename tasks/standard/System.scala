@@ -51,7 +51,7 @@ object Transform
 			case Join(in, f) => uniform(in)(f)
 		}
 	}
-		
+
 	def uniform[T, D](tasks: Seq[Task[D]])(f: Seq[Result[D]] => Either[Task[T], T]): Node[Task, T] = new Node[Task, T] {
 		type Mixed = HNil
 		val mixedIn = KNil

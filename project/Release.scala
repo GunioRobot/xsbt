@@ -49,7 +49,7 @@ object Release extends Build
 		sbtRemoteRepo := "git@github.com:harrah/xsbt.git",
 		wikiRemoteRepo := "git@github.com:harrah/xsbt.wiki.git",
 		updatedPagesRepository <<= updatedRepo(pagesRepository, sbtRemoteRepo, Some("gh-pages")),
-		updatedWikiRepository <<= updatedRepo(wikiRepository, wikiRemoteRepo, None)		
+		updatedWikiRepository <<= updatedRepo(wikiRepository, wikiRemoteRepo, None)
 	)
 	def deployLauncher(launcher: ScopedTask[File]) =
 		(launcher, launcherRemotePath, credentials, remoteBase, streams) map { (launchJar, remotePath, creds, base, s) =>

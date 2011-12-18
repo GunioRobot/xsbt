@@ -41,7 +41,7 @@ final class ScriptMain extends xsbti.AppMain
 		val commands = Script.Name +: configuration.arguments.map(_.trim)
 		val state = State( configuration, ScriptCommands, Set.empty, None, commands, State.newHistory, initialAttributes, State.Continue )
 		MainLoop.runLogged(state)
-	}	
+	}
 }
 final class ConsoleMain extends xsbti.AppMain
 {
@@ -67,7 +67,7 @@ object MainLoop
 		runAndClearLast(state, logBacking) match {
 			case ret: Return =>  // delete current and last log files when exiting normally
 				logBacking.file.delete()
-				deleteLastLog(logBacking) 
+				deleteLastLog(logBacking)
 				ret.result
 			case clear: ClearGlobalLog => // delete previous log file, move current to previous, and start writing to a new file
 				deleteLastLog(logBacking)
@@ -76,7 +76,7 @@ object MainLoop
 				logBacking.file.delete
 				runLoggedLoop(keep.state, logBacking.unshift)
 		}
-		
+
 	/** Runs the next sequence of commands, cleaning up global logging after any exceptions. */
 	def runAndClearLast(state: State, logBacking: GlobalLogBacking): RunNext =
 		try
@@ -161,7 +161,7 @@ object BuiltinCommands
 		val orElse = () => DefaultBootCommands ::: s
 		delegateToAlias(BootCommand, success(orElse) )(s)
 	}
-	
+
 	def runHelp(s: State, h: Help)(args: Seq[String]): State =
 	{
 		val message =
@@ -225,7 +225,7 @@ object BuiltinCommands
 		val index = structure.index
 		index.keyIndex.keys(Some(currentRef)).toSeq map index.keyMap sortBy(_.label)
 	}
-	def tasksHelp(s: State): String =	
+	def tasksHelp(s: State): String =
 		aligned("  ", "   ", taskDetail(s)) mkString("\n", "\n", "")
 
 	def taskStrings(key: AttributeKey[_]): Option[(String, String)]  =  key.description map { d => (key.label, d) }
@@ -253,7 +253,7 @@ object BuiltinCommands
 			case Some(name ~ Some(None)) => removeAlias(s, name.trim)
 			case Some(name ~ Some(Some(value))) => addAlias(s, name.trim, value.trim)
 		}
-	
+
 	def shell = Command.command(Shell, ShellBrief, ShellDetailed) { s =>
 		val history = (s get historyPath.key) getOrElse Some((s.baseDir / ".history").asFile)
 		val prompt = (s get shellPrompt.key) match { case Some(pf) => pf(s); case None => "> " }
@@ -273,13 +273,13 @@ object BuiltinCommands
 		( token(';' ~> OptSpace) flatMap { _ => matched((s.combinedParser&nonSemi) | nonSemi) <~ token(OptSpace) } map (_.trim) ).+
 	}
 
-	def multiApplied(s: State) = 
+	def multiApplied(s: State) =
 		Command.applyEffect( multiParser(s) )( _ ::: s )
 
 	def multi = Command.custom(multiApplied, Help(Multi, MultiBrief, MultiDetailed) )
-	
+
 	lazy val otherCommandParser = (s: State) => token(OptSpace ~> combinedLax(s, any.+) )
-	def combinedLax(s: State, any: Parser[_]): Parser[String] = 
+	def combinedLax(s: State, any: Parser[_]): Parser[String] =
 		matched(s.combinedParser | token(any, hide= const(true)))
 
 	def ifLast = Command(IfLast, IfLastBrief, IfLastDetailed)(otherCommandParser) { (s, arg) =>
@@ -288,7 +288,7 @@ object BuiltinCommands
 	def append = Command(AppendCommand, AppendLastBrief, AppendLastDetailed)(otherCommandParser) { (s, arg) =>
 		s.copy(remainingCommands = s.remainingCommands :+ arg)
 	}
-	
+
 	def setOnFailure = Command(OnFailure, OnFailureBrief, OnFailureDetailed)(otherCommandParser) { (s, arg) =>
 		s.copy(onFailure = Some(arg))
 	}
@@ -405,7 +405,7 @@ object BuiltinCommands
 		val append = Load.transformSettings(Load.projectScope(currentRef), currentRef.build, rootProject, settings)
 		session.appendSettings( append map (a => (a, arg)))
 	}
-	def inspect = Command(InspectCommand, inspectBrief, inspectDetailed)(inspectParser) { case (s, (option, sk)) => 
+	def inspect = Command(InspectCommand, inspectBrief, inspectDetailed)(inspectParser) { case (s, (option, sk)) =>
 		logger(s).info(inspectOutput(s, option, sk))
 		s
 	}
@@ -417,7 +417,7 @@ object BuiltinCommands
 		{
 			case InspectOption.Details(actual) =>
 				Project.details(structure, actual, sk.scope, sk.key)
-			case InspectOption.DependencyTree => 
+			case InspectOption.DependencyTree =>
 				val basedir = new File(Project.session(s).current.build)
 				Project.settingGraph(structure, basedir, sk).dependsAscii
 			case InspectOption.Uses =>
@@ -491,7 +491,7 @@ object BuiltinCommands
 	* the last* commands operate on any output since the last 'shell' command and do shift the log file.
 	* Otherwise, the output since the previous 'shell' command is used and the log file is not shifted.*/
 	def isLastOnly(s: State): Boolean = s.history.previous.forall(_ == Shell)
-		
+
 	def printLast(s: State): Seq[String] => Unit = _ foreach println
 
 	def autoImports(extracted: Extracted): EvalImports  =  new EvalImports(imports(extracted), "<auto-imports>")
@@ -540,7 +540,7 @@ object BuiltinCommands
 	{
 		val result = (SimpleReader.readLine("Project loading failed: (r)etry, (q)uit, (l)ast, or (i)gnore? ") getOrElse Quit).toLowerCase
 		def matches(s: String) = !result.isEmpty && (s startsWith result)
-		
+
 		if(result.isEmpty || matches("retry"))
 			LoadProject :: s.clearGlobalLog
 		else if(matches(Quit))
@@ -571,7 +571,7 @@ object BuiltinCommands
 		SessionSettings.checkSession(session, s)
 		Project.setProject(session, structure, s)
 	}
-	
+
 	def handleException(e: Throwable, s: State): State =
 		handleException(e, s, logger(s))
 	def handleException(e: Throwable, s: State, log: Logger): State =
@@ -595,7 +595,7 @@ object BuiltinCommands
 		log.error(if(messageOnly) e.getMessage else ErrorHandling reducedToString e)
 		log.error("Use 'last' for the full log.")
 	}
-	
+
 	def addAlias(s: State, name: String, value: String): State =
 		if(Command validID name) {
 			val removed = removeAlias(s, name)
@@ -607,7 +607,7 @@ object BuiltinCommands
 
 	def removeAliases(s: State): State  =  removeTagged(s, CommandAliasKey)
 	def removeAlias(s: State, name: String): State  =  s.copy(definedCommands = s.definedCommands.filter(c => !isAliasNamed(name, c)) )
-	
+
 	def removeTagged(s: State, tag: AttributeKey[_]): State = s.copy(definedCommands = removeTagged(s.definedCommands, tag))
 	def removeTagged(as: Seq[Command], tag: AttributeKey[_]): Seq[Command] = as.filter(c => ! (c.tags contains tag))
 

@@ -79,7 +79,7 @@ class TestLogger(val logging: TestLogging) extends TestsListener
 {
 		import logging.{global => log, logTest}
 	protected var skipped, errors, passed, failures = 0
-	
+
 	def startGroup(name: String) {}
 	def testEvent(event: TestEvent): Unit = event.detail.foreach(count)
 	def endGroup(name: String, t: Throwable)
@@ -93,8 +93,8 @@ class TestLogger(val logging: TestLogging) extends TestsListener
 		event.result match
 		{
 			case TResult.Error => errors +=1
-			case TResult.Success => passed +=1 
-			case TResult.Failure => failures +=1 
+			case TResult.Success => passed +=1
+			case TResult.Failure => failures +=1
 			case TResult.Skipped => skipped += 1
 		}
 	}

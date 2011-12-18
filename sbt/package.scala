@@ -23,7 +23,7 @@ package object sbt extends sbt.std.TaskExtra with sbt.Types with sbt.ProcessExtr
 	def uri(s: String): URI = new URI(s)
 	def file(s: String): File = new File(s)
 	def url(s: String): URL = new URL(s)
-	
+
 	final val ThisScope = Scope.ThisScope
 	final val GlobalScope = Scope.GlobalScope
 

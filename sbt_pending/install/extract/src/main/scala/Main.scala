@@ -9,7 +9,7 @@ import java.util.zip.{ZipEntry, ZipFile}
 object Main
 {
 	lazy val log: Logger = new ConsoleLogger
-	
+
 	def main(args: Array[String])
 	{
 		if( args contains "debug" )
@@ -42,15 +42,15 @@ object Main
 	private def extractAndRun(zip: ZipFile, loaderEntry: ZipEntry, projectEntry: ZipEntry, installEntry: ZipEntry) =
 	{
 		val zipResource = OpenResource.zipEntry(zip)
-		
+
 		import FileUtilities.{gunzip, readString, transfer, unzip, writeStream}
 		val directory = new File(".", trimExtension(projectEntry.getName, ".zip"))
 		assume(!directory.exists, "Could not extract project: directory " + projectEntry.getName + " exists.")
-		
+
 		val loaderBaseName = trimExtension(loaderEntry.getName, packedGzip)
 		val loaderFile = new File(directory, loaderBaseName + ".jar")
 		val tempLoaderFile = new File(directory, loaderBaseName + ".pack")
-		
+
 		def extractLoader() =
 		{
 			implicit def fileToPath(f: File) = Path.fromFile(f)

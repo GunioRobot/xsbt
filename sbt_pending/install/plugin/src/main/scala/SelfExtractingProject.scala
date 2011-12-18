@@ -61,7 +61,7 @@ trait BasicSelfExtractingProject extends BasicScalaProject with SelfExtractingPr
 	def installActions: List[String] = update.name :: `package`.name :: Nil
 	def jvmOptions: List[String] = Nil
 	def selfExtractingJar: Path = outputPath / (artifactBaseName + "-setup.jar")
-	
+
 	lazy val installer = installerAction
 	def installerAction = task { createSelfExtractingJar(installActions, jvmOptions, packageProjectZip, selfExtractingJar) } dependsOn packageProject
 }

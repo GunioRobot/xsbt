@@ -34,7 +34,7 @@ object LaunchProguard
 		proguardConfiguration <<= writeProguardConfiguration,
 		proguard <<= proguardTask
 	)
-	
+
 	def specific(launchSub: Reference): Seq[Setting[_]] = inConfig(Proguard)(Seq(
 		keepFullClasses ++= "xsbti.**" :: "jline.**" :: Nil,
 		keepClasses ++= "org.apache.ivy.plugins.resolver.URLResolver" :: "org.apache.ivy.plugins.resolver.IBiblioResolver" :: Nil,

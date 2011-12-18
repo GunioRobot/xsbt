@@ -111,7 +111,7 @@ object TestFramework
 
 	private val TestStartName = "test-start"
 	private val TestFinishName = "test-finish"
-	
+
 	private[sbt] def safeForeach[T](it: Iterable[T], log: Logger)(f: T => Unit): Unit =
 		it.foreach(i => try f(i) catch { case e: Exception => log.trace(e); log.error(e.toString) })
 
@@ -165,18 +165,18 @@ object TestFramework
 			assignTests()
 		map.toMap transform { (framework, tests) => (tests.toSet, args(framework)) };
 	}
-		
+
 	private def createTestTasks(loader: ClassLoader, tests: Map[Framework, (Set[TestDefinition], Seq[String])], log: Logger, listeners: Seq[TestReportListener]) =
 	{
 		val testsListeners = listeners collect { case tl: TestsListener => tl }
 		def foreachListenerSafe(f: TestsListener => Unit): () => Unit = () => safeForeach(testsListeners, log)(f)
-		
+
 			import TestResult.{Error,Passed,Failed}
 
 		val startTask = foreachListenerSafe(_.doInit)
 		val testTasks =
 			tests.view flatMap { case (framework, (testDefinitions, testArgs)) =>
-			
+
 					val runner = new TestRunner(framework, loader, listeners, log)
 					for(testDefinition <- testDefinitions) yield
 					{

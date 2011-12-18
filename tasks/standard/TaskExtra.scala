@@ -79,12 +79,12 @@ trait TaskExtra
 
 	final implicit def t2ToMulti[A,B](t: (Task[A],Task[B])) = multInputTask(t._1 :^: t._2 :^: KNil)
 	final implicit def f2ToHfun[A,B,R](f: (A,B) => R): (A :+: B :+: HNil => R) = { case a :+: b :+: HNil => f(a,b) }
-	
+
 	final implicit def t3ToMulti[A,B,C](t: (Task[A],Task[B],Task[C])) = multInputTask(t._1 :^: t._2 :^: t._3 :^: KNil)
 	final implicit def f3ToHfun[A,B,C,R](f: (A,B,C) => R): (A :+: B :+: C :+: HNil => R) = { case a :+: b :+: c :+: HNil => f(a,b,c) }
-	
+
 	final implicit def actionToTask[T](a:  Action[T]): Task[T] = Task(Info(), a)
-	
+
 	final def task[T](f: => T): Task[T] = toTask(f _)
 	final implicit def toTask[T](f: () => T): Task[T] = new Pure(f)
 
@@ -100,8 +100,8 @@ trait TaskExtra
 		def join: Task[Seq[S]] = new Join(in, (s: Seq[Result[S]]) => Right(TaskExtra.all(s)) )
 		def reduced(f: (S,S) => S): Task[S] = TaskExtra.reduced(in.toIndexedSeq, f)
 	}
-	
-		import TaskExtra.{allM, anyFailM, failM, successM}	
+
+		import TaskExtra.{allM, anyFailM, failM, successM}
 	final implicit def multInputTask[In <: HList](tasks: Tasks[In]): MultiInTask[In] = new MultiInTask[In] {
 		def flatMapR[T](f: Results[In] => Task[T]): Task[T] = new FlatMapped(tasks, f)
 		def flatMap[T](f: In => Task[T]): Task[T] = flatMapR(f compose allM)
@@ -116,17 +116,17 @@ trait TaskExtra
 		type HL = S :+: HNil
 		private val ml = in :^: KNil
 		private def headM = (_: Results[HL]).combine.head
-		
+
 		def flatMapR[T](f: Result[S] => Task[T]): Task[T] = new FlatMapped[T, HL](ml, f ∙ headM)
 		def mapR[T](f: Result[S] => T): Task[T] = new Mapped[T, HL](ml, f ∙ headM)
 		def dependsOn(tasks: Task[_]*): Task[S] = new DependsOn(in, tasks)
-		
+
 		def flatMap[T](f: S => Task[T]): Task[T] = flatMapR(f compose successM)
 		def flatFailure[T](f: Incomplete => Task[T]): Task[T] = flatMapR(f compose failM)
-		
+
 		def map[T](f: S => T): Task[T] = mapR(f compose successM)
 		def mapFailure[T](f: Incomplete => T): Task[T] = mapR(f compose failM)
-		
+
 		def andFinally(fin: => Unit): Task[S] = mapR(x => Result.tryValue[S]( { fin; x }))
 		def doFinally(t: Task[Unit]): Task[S] = flatMapR(x => t.mapR { tx => Result.tryValues[S](tx :: Nil, x) })
 		def || [T >: S](alt: Task[T]): Task[T] = flatMapR { case Value(v) => task(v); case Inc(i) => alt }
@@ -152,26 +152,26 @@ trait TaskExtra
 	final implicit def binaryPipeTask[Key](in: Task[_])(implicit streams: Task[TaskStreams[Key]], key: Task[_] => Key): BinaryPipe = new BinaryPipe {
 		def binary[T](f: BufferedInputStream => T): Task[T] = pipe0(None, f)
 		def binary[T](sid: String)(f: BufferedInputStream => T): Task[T] = pipe0(Some(sid), f)
-		
+
 		def #>(f: File): Task[Unit] = pipe0(None, toFile(f))
 		def #>(sid: String, f: File): Task[Unit] = pipe0(Some(sid), toFile(f))
-		
+
 		private def pipe0 [T](sid: Option[String], f: BufferedInputStream => T): Task[T] =
 			streams map { s => f(s.readBinary(key(in), sid)) }
-		
+
 		private def toFile(f: File) = (in: InputStream) => IO.transfer(in, f)
 	}
 	final implicit def textPipeTask[Key](in: Task[_])(implicit streams: Task[TaskStreams[Key]], key: Task[_] => Key): TextPipe = new TextPipe {
 		def text[T](f: BufferedReader => T): Task[T] = pipe0(None, f)
 		def text [T](sid: String)(f: BufferedReader => T): Task[T] = pipe0(Some(sid), f)
-		
+
 		private def pipe0 [T](sid: Option[String], f: BufferedReader => T): Task[T] =
 			streams map { s => f(s.readText(key(in), sid)) }
 	}
 	final implicit def linesTask[Key](in: Task[_])(implicit streams: Task[TaskStreams[Key]], key: Task[_] => Key): TaskLines = new TaskLines {
 		def lines: Task[List[String]] = lines0(None)
 		def lines(sid: String): Task[List[String]] = lines0(Some(sid))
-		
+
 		private def lines0 [T](sid: Option[String]): Task[List[String]] =
 			streams map { s => IO.readLines(s.readText(key(in), sid) ) }
 	}
@@ -190,7 +190,7 @@ object TaskExtra extends TaskExtra
 	def reduced[S](i: IndexedSeq[Task[S]], f: (S, S) => S): Task[S] =
 		i match
 		{
-			case Seq() => error("Cannot reduce empty sequence") 
+			case Seq() => error("Cannot reduce empty sequence")
 			case Seq(x) => x
 			case Seq(x, y) => reducePair(x, y, f)
 			case z =>

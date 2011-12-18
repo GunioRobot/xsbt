@@ -45,7 +45,7 @@ sealed trait RichParser[A]
 
 	/** Uses the specified message if the original Parser fails.*/
 	def !!!(msg: String): Parser[A]
-	
+
 	def unary_- : Parser[Unit]
 	def & (o: Parser[_]): Parser[A]
 	def - (o: Parser[_]): Parser[A]
@@ -196,7 +196,7 @@ object Parser extends ParserMain
 						case None => if(max.isZero) success(revAcc.reverse) else new Repeat(partial, repeated, min, max, revAcc)
 					}
 			}
-		
+
 		partial match
 		{
 			case Some(part) =>
@@ -233,7 +233,7 @@ trait ParserMain
 		def <~[B](b: Parser[B]): Parser[A] = (a ~ b) map { case av ~ _ => av }
 		def ~>[B](b: Parser[B]): Parser[B] = (a ~ b) map { case _ ~ bv => bv }
 		def !!!(msg: String): Parser[A] = onFailure(a, msg)
-	
+
 		def unary_- = not(a)
 		def & (o: Parser[_]) = and(a, o)
 		def - (o: Parser[_]) = sub(a, o)

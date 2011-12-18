@@ -40,7 +40,7 @@ object Incremental
 			log.debug("Incrementally invalidated: " + incInv)
 			cycle(incInv, merged, doCompile, log)
 		}
-	
+
 
 	/**
 	* Accepts the sources that were recompiled during the last step and functions
@@ -67,7 +67,7 @@ object Incremental
 	{
 		val previous = previousAnalysis.stamps
 		val previousAPIs = previousAnalysis.apis
-		
+
 		val srcChanges = changes(previous.allInternalSources.toSet, sources,  f => !equivS.equiv( previous.internalSource(f), current.internalSource(f) ) )
 		val removedProducts = previous.allProducts.filter( p => !equivS.equiv( previous.product(p), current.product(p) ) ).toSet
 		val binaryDepChanges = previous.allBinaries.filter( externalBinaryModified(entry, forEntry, previous, current)).toSet

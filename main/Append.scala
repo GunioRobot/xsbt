@@ -5,7 +5,7 @@ package sbt
 	import scala.annotation.implicitNotFound
 
 object Append
-{	
+{
 	@implicitNotFound(msg = "No implicit for Append.Value[${A}, ${B}] found,\n  so ${B} cannot be appended to ${A}")
 	sealed trait Value[A,B]
 	{

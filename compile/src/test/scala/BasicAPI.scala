@@ -39,7 +39,7 @@ package org.example2 {
 	}
 	trait ZZZ[T] extends ZZ[List[T]]
 	trait ZZZZ extends ZZZ[Int]
-	trait Z extends ZZZZ 
+	trait Z extends ZZZZ
 	trait P[S] {
 		trait Q
 		def x(s: S): S

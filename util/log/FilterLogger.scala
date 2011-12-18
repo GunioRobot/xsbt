@@ -17,7 +17,7 @@ class FilterLogger(delegate: AbstractLogger) extends BasicLogger
 	override def setSuccessEnabled(flag: Boolean) { delegate.setSuccessEnabled(flag) }
 	override def successEnabled = delegate.successEnabled
 	override def setTrace(level: Int) { delegate.setTrace(level) }
-	override def getTrace = delegate.getTrace 
+	override def getTrace = delegate.getTrace
 	def log(level: Level.Value, message: => String)
 	{
 		if(atLevel(level))

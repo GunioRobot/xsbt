@@ -56,7 +56,7 @@ class TestScriptParser(handlers: Map[Char, StatementHandler]) extends RegexParse
 			}
 		}
 	}
-	
+
 	lazy val statements = rep1(space ~> statement  <~ newline )
 	def statement: Parser[ ( StatementHandler, Statement ) ] =
 	{
@@ -80,6 +80,6 @@ class TestScriptParser(handlers: Map[Char, StatementHandler]) extends RegexParse
 	lazy val word: Parser[String] =  ("\'" ~> "[^'\n\r]*".r <~ "\'")  |  ("\"" ~> "[^\"\n\r]*".r <~ "\"")  |  WordRegex
 	def startCharacterParser: Parser[Char] = elem("start character", handlers.contains _) |
 		( ( newline | err("expected start character " +handlers.keys.mkString("(", "", ")") ) ) ~> failure("end of input") )
-		
+
 	def newline = """\s*([\n\r]|$)""".r
 }

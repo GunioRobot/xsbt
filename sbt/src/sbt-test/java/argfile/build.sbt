@@ -9,4 +9,3 @@ TaskKey[Unit]("init") <<= (scalaSource in Configurations.Compile, javaSource in 
 	copyFile(file("changes") / "A.java", js / "a" / "A.java")
 	delete(file("changes"))
 }
-	

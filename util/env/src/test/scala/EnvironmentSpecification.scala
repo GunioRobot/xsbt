@@ -8,7 +8,7 @@ import org.scalacheck._
 object EnvironmentSpecification extends Properties("Environment")
 { s =>
 	private[this] type Env = BasicEnvironment { def x: Property[Int] }
-	
+
 	val log = new ConsoleLogger
 
 	specify("Non-optional user property assignment", testAssign _)
@@ -19,7 +19,7 @@ object EnvironmentSpecification extends Properties("Environment")
 	specify("Uninitialized empty when all properties have defaults", testDefaultUninitializedEmpty _)
 	specify("Property defaulting to another property ok", propertyDefaultsToProperty _)
 	specify("Project-style name+organization", (name: String) => projectEmulation(name.trim))
-	
+
 	private def projectEmulation(testName: String) =
 	{
 		import Prop._
@@ -85,10 +85,10 @@ object EnvironmentSpecification extends Properties("Environment")
 		}
 	}
 	private def testDefaultUninitializedEmpty(default: Int) = withDefaultEnvironment(default)(_.uninitializedProperties.isEmpty)
-	
+
 	private def defaultEnvironment(default: Int)(backing: Path) = new DefaultEnv(backing) { val x = propertyOptional[Int](default) }
 	private def environment(backing: Path) = new DefaultEnv(backing) { val x = property[Int] }
-	
+
 	private def withBacking[T](f: Path => T): T = Control.getOrError( FileUtilities.withTemporaryFile(log, "env", "")(file => Right(f(Path.fromFile(file))) ) )
 	private def withEnvironment[T](f: Env => T): T = withEnvironmentImpl(environment)(f)
 	private def withDefaultEnvironment[T](default: Int)(f: Env => T): T = withEnvironmentImpl(defaultEnvironment(default))(f)

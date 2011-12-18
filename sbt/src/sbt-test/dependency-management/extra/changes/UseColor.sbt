@@ -2,7 +2,7 @@ ivyPaths <<= (baseDirectory, target)( (dir, t) => new IvyPaths(dir, Some(t / "iv
 
 publishMavenStyle := false
 
-resolvers <<= baseDirectory( base => 
+resolvers <<= baseDirectory( base =>
 	Resolver.file("test-repo", base / "repo" / "test")(Resolver.defaultIvyPatterns) :: Nil
 )
 

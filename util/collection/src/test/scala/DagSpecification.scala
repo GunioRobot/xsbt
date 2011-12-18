@@ -27,7 +27,7 @@ object DagSpecification extends Properties("Dag")
 		}
 		Gen.parameterized(nonterminalGen)
 	}
-	
+
 	private def isSet[T](c: Seq[T]) = Set(c: _*).size == c.size
 	private def dependenciesPrecedeNodes(sort: List[TestDag]) =
 	{

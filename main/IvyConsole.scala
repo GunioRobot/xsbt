@@ -11,7 +11,7 @@ package sbt
 object IvyConsole
 {
 	final val Name = "ivy-console"
-	lazy val command = 
+	lazy val command =
 		Command.command(Name) { state =>
 			val Dependencies(managed, repos, unmanaged) = parseDependencies(state.remainingCommands, state.log)
 			val base = new File(CommandSupport.bootDirectory(state), Name)
@@ -30,7 +30,7 @@ object IvyConsole
 				showSuccess in Global := false
 			)
 			val append = Load.transformSettings(Load.projectScope(currentRef), currentRef.build, rootProject, depSettings)
-                   
+
 			val newStructure = Load.reapply(session.original ++ append, structure)
 			val newState = state.copy(remainingCommands = "console-quick" :: Nil)
 			Project.setProject(session, newStructure, newState)

@@ -11,13 +11,13 @@ object MyBuild extends Build
 	val persisted = TaskKey[Int]("persist")
 	val checkKeep = InputKey[Unit]("check-keep")
 	val checkPersisted = InputKey[Unit]("check-persist")
-	
+
 	val updateDemo = TaskKey[Int]("demo")
 	val check = InputKey[Unit]("check")
 	val sample = AttributeKey[Int]("demo-key")
 
 	def updateDemoInit = state map { s => (s get sample getOrElse 9) + 1 }
-	
+
 	lazy val root = Project("root", file(".")) settings(
 		updateDemo <<= updateDemoInit updateState demoState,
 		check <<= checkInit,

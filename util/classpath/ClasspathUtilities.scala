@@ -40,13 +40,13 @@ object ClasspathUtilities
 		}
 		parent(getClass.getClassLoader)
 	}
-	
+
 	final val AppClassPath = "app.class.path"
 	final val BootClassPath = "boot.class.path"
-	
+
 	def createClasspathResources(classpath: Seq[File], instance: ScalaInstance): Map[String,String] =
 		createClasspathResources(classpath ++ instance.jars, instance.jars)
-		
+
 	def createClasspathResources(appPaths: Seq[File], bootPaths: Seq[File]): Map[String, String] =
 	{
 		def make(name: String, paths: Seq[File]) = name -> Path.makeString(paths)
@@ -61,10 +61,10 @@ object ClasspathUtilities
 
 	def makeLoader[T](classpath: Seq[File], parent: ClassLoader, instance: ScalaInstance, nativeTemp: File): ClassLoader =
 		toLoader(classpath, parent, createClasspathResources(classpath, instance), nativeTemp)
-	
+
 	private[sbt] def printSource(c: Class[_]) =
 		println(c.getName + " loader=" +c.getClassLoader + " location=" + IO.classLocationFile(c))
-	
+
 	def isArchive(file: File): Boolean = isArchiveName(file.getName)
 	def isArchiveName(fileName: String) = fileName.endsWith(".jar") || fileName.endsWith(".zip")
 	// Partitions the given classpath into (jars, directories)
@@ -83,7 +83,7 @@ object ClasspathUtilities
 		else
 			classpathDirectories.toList.find(Path.relativize(_, f).isDefined).isDefined
 	}
-	
+
 	/** Returns all entries in 'classpath' that correspond to a compiler plugin.*/
 	private[sbt] def compilerPlugins(classpath: Seq[File]): Iterable[File] =
 	{
@@ -109,7 +109,7 @@ object ClasspathUtilities
 		}
 		catch { case e: Exception => Nil }
 	}
-	
+
 	private lazy val (extraJars, extraDirs) =
 	{
 		import scala.tools.nsc.GenericRunnerCommand

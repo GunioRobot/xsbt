@@ -21,12 +21,12 @@ object WithCompiler
 		}
 	}
 	def launcher[T](f: (xsbti.Launcher, Logger) => T): T =
-		TestLogger { log => 
+		TestLogger { log =>
 			boot.LaunchTest.withLauncher { launch => f(launch, log) }
 		}
 
 	def getClassResource(resource: Class[_]): File = IO.classLocationFile(resource)
-	def getResource(resource: String): File = 
+	def getResource(resource: String): File =
 	{
 		val src = getClass.getClassLoader.getResource(resource)
 		if(src ne null) IO.asFile(src) else error("Resource not found: " + resource)

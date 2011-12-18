@@ -45,7 +45,7 @@ object ScalaInstance
 
 	def extraJars(scalaHome: File): Seq[File] =
 		optScalaJar(scalaHome, "jline.jar") ++ optScalaJar(scalaHome, "fjbg.jar")
-		
+
 	private def compilerJar(scalaHome: File) = scalaJar(scalaHome, "scala-compiler.jar")
 	private def libraryJar(scalaHome: File) = scalaJar(scalaHome, "scala-library.jar")
 
@@ -69,7 +69,7 @@ object ScalaInstance
 	private def fastActualVersion(scalaLoader: ClassLoader): String =
 	{
 		val stream = scalaLoader.getResourceAsStream("compiler.properties")
-		try { 
+		try {
 			val props = new java.util.Properties
 			props.load(stream)
 			props.getProperty("version.number")

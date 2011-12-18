@@ -45,7 +45,7 @@ final class Eval(optionsNoncp: Seq[String], classpath: Seq[File], mkReporter: Se
 		val hash = Hash.toHex(Hash(bytes( bytes(expression) :: optBytes(backing)(fileExistsBytes) :: seqBytes(options)(bytes) ::
 			seqBytes(classpath)(fileModifiedBytes) :: seqBytes(imports.strings.map(_._1))(bytes) :: optBytes(tpeName)(bytes) :: Nil)))
 		val moduleName = makeModuleName(hash)
-		
+
 		lazy val unit = {
 			reporter.reset
 			mkUnit(srcName, line, expression)
@@ -78,7 +78,7 @@ final class Eval(optionsNoncp: Seq[String], classpath: Seq[File], mkReporter: Se
 		}
 
 		unit.body = augment(parser, importTrees, tree, tpt, moduleName)
-		
+
 		def compile(phase: Phase): Unit =
 		{
 			globalPhase = phase
@@ -148,7 +148,7 @@ final class Eval(optionsNoncp: Seq[String], classpath: Seq[File], mkReporter: Se
 	private[this] def moduleClassFilter(moduleName: String) = new java.io.FilenameFilter { def accept(dir: File, s: String) =
 		(s contains moduleName) && (s endsWith ".class")
 	}
-	private[this] def parseExpr(unit: CompilationUnit) = 
+	private[this] def parseExpr(unit: CompilationUnit) =
 	{
 		val parser = new syntaxAnalyzer.UnitParser(unit)
 
@@ -214,7 +214,7 @@ private object Eval
 	def fileExistsBytes(f: File): Array[Byte] =
 		bytes(f.exists) ++
 		bytes(f.getAbsolutePath)
- 
+
 	def bytes(s: String): Array[Byte] = s getBytes "UTF-8"
 	def bytes(l: Long): Array[Byte] =
 	{

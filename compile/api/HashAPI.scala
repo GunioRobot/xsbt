@@ -49,7 +49,7 @@ final class HashAPI(tags: TypeVars, includePrivate: Boolean, includeParamNames: 
 
 	private[this] final val PublicHash = 30
 	private[this] final val ProtectedHash = 31
-	private[this] final val PrivateHash = 32	
+	private[this] final val PrivateHash = 32
 	private[this] final val UnqualifiedHash = 33
 	private[this] final val ThisQualifierHash = 34
 	private[this] final val IdQualifierHash = 35
@@ -80,7 +80,7 @@ final class HashAPI(tags: TypeVars, includePrivate: Boolean, includeParamNames: 
 	private[this] var hash: Hash = startHash(0)
 	private[this] var magicA: Hash = startMagicA
 	private[this] var magicB: Hash = startMagicB
-	
+
 	@inline final def hashString(s: String): Unit = extend(stringHash(s))
 	@inline final def hashBoolean(b: Boolean): Unit = extend(if(b) TrueHash else FalseHash)
 	@inline final def hashSeq[T](s: Seq[T], hashF: T => Unit)
@@ -207,7 +207,7 @@ final class HashAPI(tags: TypeVars, includePrivate: Boolean, includeParamNames: 
 		extend(parameter.modifier.ordinal)
 		hashBoolean(parameter.hasDefault)
 	}
-		
+
 	def hashParameterizedDefinition[T <: ParameterizedDefinition](d: T)
 	{
 		hashTypeParameters(d.typeParameters)
@@ -225,7 +225,7 @@ final class HashAPI(tags: TypeVars, includePrivate: Boolean, includeParamNames: 
 		hashParameterizedDefinition(d)
 		hashType(d.tpe)
 	}
-	
+
 	def hashTypeParameters(parameters: Seq[TypeParameter]) = hashSeq(parameters, hashTypeParameter)
 	def hashTypeParameter(parameter: TypeParameter)
 	{
@@ -247,7 +247,7 @@ final class HashAPI(tags: TypeVars, includePrivate: Boolean, includeParamNames: 
 		hashString(arg.name)
 		hashString(arg.value)
 	}
-	
+
 	def hashTypes(ts: Seq[Type]) = hashSeq(ts, hashType)
 	def hashType(t: Type): Unit =
 		t match
@@ -263,7 +263,7 @@ final class HashAPI(tags: TypeVars, includePrivate: Boolean, includeParamNames: 
 			case s: Singleton => hashSingleton(s)
 			case pr: ParameterRef => hashParameterRef(pr)
 		}
-	
+
 	def hashParameterRef(p: ParameterRef)
 	{
 		extend(ParameterRefHash)
@@ -343,4 +343,4 @@ final class HashAPI(tags: TypeVars, includePrivate: Boolean, includeParamNames: 
 		hashType(base)
 	}
 }
-	
+

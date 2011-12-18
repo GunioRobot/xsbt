@@ -46,10 +46,10 @@ final class Update(config: UpdateConfiguration)
 
 	private def addCredentials()
 	{
-		val optionProps = 
-			Option(System.getProperty("sbt.boot.credentials")) orElse 
+		val optionProps =
+			Option(System.getProperty("sbt.boot.credentials")) orElse
 			Option(System.getenv("SBT_CREDENTIALS")) map ( path =>
-				ResolveValues.readProperties(new File(path)) 
+				ResolveValues.readProperties(new File(path))
 			)
 		optionProps foreach extractCredentials("realm","host","user","password")
 		extractCredentials("sbt.boot.realm","sbt.boot.host","sbt.boot.user","sbt.boot.password")(System.getProperties)

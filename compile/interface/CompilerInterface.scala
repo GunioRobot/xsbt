@@ -51,7 +51,7 @@ class CompilerInterface
 				def newPhase(prev: Phase) = api.newPhase(prev)
 				def name = phaseName
 			}
-			
+
 			override lazy val phaseDescriptors =
 			{
 				phasesSet += sbtAnalyzer

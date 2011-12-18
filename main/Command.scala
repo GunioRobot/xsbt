@@ -26,7 +26,7 @@ private[sbt] final class ArbitraryCommand(val parser: State => Parser[() => Stat
 object Command
 {
 	def pointerSpace(s: String, i: Int): String  =	(s take i) map { case '\t' => '\t'; case _ => ' ' } mkString;
-	
+
 		import DefaultParsers._
 
 	def command(name: String, briefHelp: String, detail: String)(f: State => State): Command  =  command(name, Help(name, (name, briefHelp), detail))(f)
@@ -43,7 +43,7 @@ object Command
 
 	def args(name: String, briefHelp: (String, String), detail: String, display: String)(f: (State, Seq[String]) => State): Command =
 		args(name, display, Help(name, briefHelp, detail) )(f)
-	
+
 	def args(name: String, display: String, help: Help = Help.empty)(f: (State, Seq[String]) => State): Command =
 		make(name, help)( state => spaceDelimited(display) map apply1(f, state) )
 
@@ -83,7 +83,7 @@ object Command
 				case Some(c) => c(state)
 			}
 		}
-		
+
 	def process(command: String, state: State): State =
 	{
 		val parser = combine(state.definedCommands)
@@ -92,7 +92,7 @@ object Command
 			case Right(s) => s() // apply command.  command side effects happen here
 			case Left(errMsg) =>
 				state.log.error(errMsg)
-				state.fail				
+				state.fail
 		}
 	}
 	def parse[T](str: String, parser: Parser[T]): Either[String, T] =

@@ -47,7 +47,7 @@ private object IvyScala
 		val over = new OverrideDependencyDescriptorMediator(null, version)
 		module.addDependencyDescriptorMediator(id, ExactPatternMatcher.INSTANCE, over)
 	}
-                
+
 	/** Checks the immediate dependencies of module for dependencies on scala jars and verifies that the version on the
 	* dependencies matches scalaVersion. */
 	private def checkDependencies(module: ModuleDescriptor, scalaVersion: String, configurations: Iterable[Configuration])

@@ -44,7 +44,7 @@ object Completions
 
 /**
 * Represents a completion.
-* The abstract members `display` and `append` are best explained with an example. 
+* The abstract members `display` and `append` are best explained with an example.
 *
 * Assuming space-delimited tokens, processing this:
 *   am is are w<TAB>
@@ -130,7 +130,7 @@ object Completion
 
 	val empty: Completion = suggestStrict("")
 	def single(c: Char): Completion = suggestStrict(c.toString)
-	
+
 	def displayOnly(value: => String): Completion = new DisplayOnly(value)
 	def displayStrict(value: String): Completion = displayOnly(value)
 	def token(prepend: => String, append: => String): Completion = new Token(prepend, append)

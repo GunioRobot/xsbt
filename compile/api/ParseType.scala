@@ -12,9 +12,9 @@ import combinator.{PackratParsers, RegexParsers}
 object ParseType extends RegexParsers with PackratParsers
 {
 	type P[I] = PackratParser[I]
-	
+
 	def parseType(s: String): Either[String, Type] = parse(s, phrase(tpe))
-	
+
 	def parse[T](s: String, p: P[T]): Either[String, T] =
 	{
 		p(new PackratReader(new input.CharSequenceReader(s.trim, 0))) match
@@ -29,11 +29,11 @@ object ParseType extends RegexParsers with PackratParsers
 	}
 
 	lazy val tpe: Parser[Type] = functionType | infixType
-	
+
 	lazy val reserved = Set("=>", "<-", "#")
 	lazy val notReserved = (s: String) => if(reserved(s)) failure(s) else success(s)
 	lazy val combine = (ls: List[String]) => ls.mkString("_")
-	
+
 	lazy val id = rep1sep(alphaID | symID, "_") >> ( notReserved compose combine )
 	lazy val alphaID = """[a-zA-Z0-9]+""".r
 	lazy val symID = """[^\s\[\].,\)\(a-zA-Z0-9]+""".r
@@ -53,34 +53,34 @@ object ParseType extends RegexParsers with PackratParsers
 		parameterizedType |
 		projectionType |
 		stableId
-		
+
 	lazy val parameterizedType: P[Parameterized] =
 		simpleType ~ typeArgs ^^ {
 			case base ~ args => new Parameterized( base, args.toArray )
 		}
-	
+
 	lazy val projectionType: P[Projection] =
 		(simpleType <~ "#") ~ id ^^ {
 			case prefix ~ select => New.projection(prefix, select)
 		}
 
 	lazy val stableId: P[SimpleType] = rep1sep(id, '.') ^^ ( New.toType )
-		
+
 	lazy val functionType: P[Parameterized] =
 		(functionArgs <~ "=>") ~ tpe ^^ {
 			case args ~ result => New.functionType(args, result)
 		}
-		
+
 	lazy val functionArgs: P[List[Type]] = ("(" ~> rep1sep(infixType, ",") <~ ")") | (tpe ^^ (x => List(x)))
 }
 object New
 {
 	lazy val UnitType: SimpleType = fromName("scala.Unit")
-	
+
 	def tupleType(args: Seq[Type]): Parameterized = new Parameterized( tupleN(args.length), args.toArray )
-	
+
 	def functionType(args: Seq[Type], result: Type): Parameterized  =  new Parameterized( functionN(args.length), (args ++ Seq(result)).toArray )
-		
+
 	def functionN(n: Int): SimpleType = fromName("scala.Function" + n)
 	def tupleN(n: Int): SimpleType = fromName("scala.Tuple" + n)
 
@@ -102,7 +102,7 @@ object New
 
 	def singleton(p: List[String])  =  new Singleton( path(p) )
 
-	def path(p: List[String]) = 
+	def path(p: List[String]) =
 	{
 		assert(!p.contains(Tpe))
 		new Path( p.map(new Id(_)).toArray )

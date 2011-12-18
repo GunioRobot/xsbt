@@ -15,9 +15,9 @@ import IO.wrapNull
 final class ScriptedTests(resourceBaseDirectory: File, bufferLog: Boolean, sbtVersion: String, defScalaVersion: String, buildScalaVersions: String, launcher: File)
 {
 	private val testResources = new Resources(resourceBaseDirectory)
-	
+
 	val ScriptFilename = "test"
-	
+
 	def scriptedTest(group: String, name: String, log: xsbti.Logger): Unit =
 		scriptedTest(group, name, Logger.xlog2Log(log))
 	def scriptedTest(group: String, name: String, log: Logger): Unit = {
@@ -42,7 +42,7 @@ final class ScriptedTests(resourceBaseDirectory: File, bufferLog: Boolean, sbtVe
 		val buffered = new BufferedLogger(new FullLogger(log))
 		if(bufferLog)
 			buffered.record()
-		
+
 		def createParser() =
 		{
 			val fileHandler = new FileCommands(testDirectory)
@@ -99,7 +99,7 @@ object ScriptedTests
 
 	def run(resourceBaseDirectory: File, bufferLog: Boolean, sbtVersion: String, defScalaVersion: String, buildScalaVersions: String, tests: Array[String], logger: AbstractLogger, bootProperties: File)
 	{
-		val runner = new ScriptedTests(resourceBaseDirectory, bufferLog, sbtVersion, defScalaVersion, buildScalaVersions, bootProperties)	
+		val runner = new ScriptedTests(resourceBaseDirectory, bufferLog, sbtVersion, defScalaVersion, buildScalaVersions, bootProperties)
 		for( ScriptedTest(group, name) <- get(tests, resourceBaseDirectory, logger) )
 			runner.scriptedTest(group, name, logger)
 	}

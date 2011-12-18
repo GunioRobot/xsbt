@@ -29,11 +29,11 @@ object ArtifactTest extends Build
 	def org = "test"
 
 	def mainArtifact = Artifact(artifactID, tpe, ext, classifier)
-	
+
 	// define the IDs to use for publishing and retrieving
 	def publishedID = org % artifactID % vers artifacts(mainArtifact)
 	def retrieveID = org % "test-retrieve" % "2.0"
-	
+
 	// check that the test class is on the compile classpath, either because it was compiled or because it was properly retrieved
 	def checkTask(classpath: TaskKey[Classpath]) = (classpath in Compile, scalaInstance) map { (cp, si) =>
 		val loader = sbt.classpath.ClasspathUtilities.toLoader(cp.files, si.loader)

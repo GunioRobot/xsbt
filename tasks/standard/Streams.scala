@@ -16,10 +16,10 @@ sealed trait TaskStreams[Key]
 	def default = outID
 	def outID = "out"
 	def errorID = "err"
-	
+
 	def readText(key: Key, sid: String = default): BufferedReader
 	def readBinary(a: Key, sid: String = default): BufferedInputStream
-	
+
 	final def readText(a: Key, sid: Option[String]): BufferedReader  =  readText(a, getID(sid))
 	final def readBinary(a: Key, sid: Option[String]): BufferedInputStream  =  readBinary(a, getID(sid))
 
@@ -30,7 +30,7 @@ sealed trait TaskStreams[Key]
 	// default logger
 	final lazy val log: Logger = log(default)
 	def log(sid: String): Logger
-	
+
 	private[this] def getID(s: Option[String]) = s getOrElse default
 }
 sealed trait ManagedStreams[Key] extends TaskStreams[Key]
@@ -63,19 +63,19 @@ object Streams
 		def close(): Unit =
 			synchronized { streams.values.foreach(_.close() ); streams.clear() }
 	}
-	
+
 	def apply[Key](taskDirectory: Key => File, name: Key => String, mkLogger: (Key, PrintWriter) => Logger): Streams[Key] = new Streams[Key] {
-	
+
 		def apply(a: Key): ManagedStreams[Key] = new ManagedStreams[Key] {
 			private[this] var opened: List[Closeable] = Nil
 			private[this] var closed = false
-		
+
 			def readText(a: Key, sid: String = default): BufferedReader =
 				make(a, sid)(f => new BufferedReader(new InputStreamReader(new FileInputStream(f), IO.defaultCharset)) )
-				
+
 			def readBinary(a: Key, sid: String = default): BufferedInputStream =
 				make(a, sid)(f => new BufferedInputStream(new FileInputStream(f)))
-	
+
 			def text(sid: String = default): PrintWriter =
 				make(a, sid)(f => new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), IO.defaultCharset))) )
 
@@ -95,7 +95,7 @@ object Streams
 
 			def key: Key = a
 			def open() {}
-			
+
 			def close(): Unit = synchronized {
 				if(!closed)
 				{

@@ -32,7 +32,7 @@ object TaskSerial extends Properties("task serial")
 	property("Allows arbitrary task limit") = forAll(MaxWorkersGen) { (sze: Int) =>
 		val size = math.max(1, sze)
 		val halfSize = size / 2 + 1
-		val all = 
+		val all =
 			checkArbitrary(size, tagged(_ => true), true ) &&
 				checkArbitrary(size, unrestricted[Task[_]], true ) &&
 				checkArbitrary(size, limitTotal[Task[_]](size), true ) &&
@@ -66,7 +66,7 @@ object TaskTest
 	def run[T](root: Task[T], checkCycles: Boolean, restrictions: ConcurrentRestrictions[Task[_]]): Result[T] =
 	{
 		val (service, shutdown) = completionService[Task[_],Completed](restrictions, (x: String) => System.err.println(x))
-		
+
 		val x = new Execute[Task](checkCycles, Execute.noTriggers)(taskToNode)
 		try { x.run(root)(service) } finally { shutdown() }
 	}

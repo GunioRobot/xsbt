@@ -25,7 +25,7 @@ object Load
 	import BuildPaths._
 	import BuildStreams._
 	import Locate.DefinesClass
-	
+
 	// note that there is State passed in but not pulled out
 	def defaultLoad(state: State, baseDirectory: File, log: Logger): (() => Eval, BuildStructure) =
 	{
@@ -67,7 +67,7 @@ object Load
 		config.copy(injectSettings = config.injectSettings.copy(projectLoaded = compiled))
 	}
 	def buildGlobalSettings(base: File, files: Seq[File], config: LoadBuildConfiguration): ClassLoader => Seq[Setting[_]] =
-	{	
+	{
 		val eval = mkEval(data(config.globalPluginClasspath), base, defaultEvalOptions)
 		val imports = baseImports ++ importAllRoot(config.globalPluginNames)
 		EvaluateConfigurations(eval, files, imports)
@@ -181,7 +181,7 @@ object Load
 	def isProjectThis(s: Setting[_]) = s.key.scope.project match { case This | Select(ThisProject) => true; case _ => false }
 	def buildConfigurations(loaded: LoadedBuild, rootProject: URI => String, rootEval: () => Eval, injectSettings: InjectSettings): Seq[Setting[_]] =
 		((loadedBuild in GlobalScope :== loaded) +:
-		transformProjectOnly(loaded.root, rootProject, injectSettings.global)) ++ 
+		transformProjectOnly(loaded.root, rootProject, injectSettings.global)) ++
 		loaded.units.toSeq.flatMap { case (uri, build) =>
 			val eval = if(uri == loaded.root) rootEval else lazyEval(build.unit)
 			val pluginSettings = build.unit.plugins.plugins
@@ -195,7 +195,7 @@ object Load
 					(thisProject :== project) +:
 					(thisProjectRef :== ref) +:
 					(defineConfig ++ project.settings ++ injectSettings.projectLoaded(loader) ++ pluginThisProject ++ configurations(srcs, eval, build.imports)(loader) ++ injectSettings.project)
-				 
+
 				// map This to thisScope, Select(p) to mapRef(uri, rootProject, p)
 				transformSettings(projectScope(ref), uri, rootProject, settings)
 			}
@@ -209,7 +209,7 @@ object Load
 	def transformSettings(thisScope: Scope, uri: URI, rootProject: URI => String, settings: Seq[Setting[_]]): Seq[Setting[_]] =
 		Project.transform(Scope.resolveScope(thisScope, uri, rootProject), settings)
 	def projectScope(project: Reference): Scope  =  Scope(Select(project), Global, Global, Global)
-	
+
 	def lazyEval(unit: BuildUnit): () => Eval =
 	{
 		lazy val eval = mkEval(unit)
@@ -504,7 +504,7 @@ object Load
 	def importAll(values: Seq[String]) = if(values.isEmpty) Nil else values.map( _ + "._" ).mkString("import ", ", ", "") :: Nil
 	def importAllRoot(values: Seq[String]) = importAll(values map rootedName)
 	def rootedName(s: String) = if(s contains '.') "_root_." + s else s
-		
+
 	def findPlugins(analysis: inc.Analysis): Seq[String]  =  discover(analysis, "sbt.Plugin")
 	def findDefinitions(analysis: inc.Analysis): Seq[String]  =  discover(analysis, "sbt.Build")
 	def discover(analysis: inc.Analysis, subclasses: String*): Seq[String] =
@@ -520,7 +520,7 @@ object Load
 
 	def initialSession(structure: BuildStructure, rootEval: () => Eval): SessionSettings =
 		new SessionSettings(structure.root, rootProjectMap(structure.units), structure.settings, Map.empty, Nil, rootEval)
-		
+
 	def rootProjectMap(units: Map[URI, LoadedBuildUnit]): Map[URI, String] =
 	{
 		val getRoot = getRootProject(units)
@@ -540,7 +540,7 @@ object Load
 	{
 		override def toString = if(uri.getScheme == "file") localBase.toString else (uri + " (locally: " + localBase +")")
 	}
-	
+
 	final class LoadedBuild(val root: URI, val units: Map[URI, LoadedBuildUnit])
 	{
 		checkCycles(units)
@@ -576,7 +576,7 @@ object Load
 	def getImports(unit: BuildUnit) = baseImports ++ importAllRoot(unit.plugins.pluginNames ++ unit.definitions.buildNames)
 
 	def referenced[PR <: ProjectReference](definitions: Seq[ProjectDefinition[PR]]): Seq[PR] = definitions flatMap { _.referenced }
-	
+
 	final class BuildStructure(val units: Map[URI, LoadedBuildUnit], val root: URI, val settings: Seq[Setting[_]], val data: Settings[Scope], val index: StructureIndex, val streams: State => Streams, val delegates: Scope => Seq[Scope], val scopeLocal: ScopeLocal)
 	{
 		val rootProject: URI => String = Load getRootProject units

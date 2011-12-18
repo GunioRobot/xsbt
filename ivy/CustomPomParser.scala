@@ -18,10 +18,10 @@ final class CustomPomParser(delegate: ModuleDescriptorParser, transform: (Module
 {
 	override def parseDescriptor(ivySettings: ParserSettings, descriptorURL: URL, validate: Boolean) =
 		transform(this, delegate.parseDescriptor(ivySettings, descriptorURL, validate))
-		
+
 	override def parseDescriptor(ivySettings: ParserSettings, descriptorURL: URL, res: Resource, validate: Boolean) =
 		transform(this, delegate.parseDescriptor(ivySettings, descriptorURL, res, validate))
-    
+
 	override def toIvyFile(is: InputStream, res: Resource, destFile: File, md: ModuleDescriptor) = delegate.toIvyFile(is, res, destFile, md)
 
 	override def accept(res: Resource) = delegate.accept(res)
@@ -75,7 +75,7 @@ object CustomPomParser
 	private[this] def shouldBeUnqualified(m: Map[String, String]): Map[String, String] =
 		m.filter { case (SbtVersionKey | ScalaVersionKey | ExtraAttributesKey,_) => true; case _ => false }
 
-	
+
 	private[this] def condAddExtra(properties: Map[String, String], id: ModuleRevisionId): ModuleRevisionId =
 		if(properties.isEmpty) id else addExtra(properties, id)
 	private[this] def addExtra(properties: Map[String, String], id: ModuleRevisionId): ModuleRevisionId =
@@ -96,7 +96,7 @@ object CustomPomParser
 
 	def qualifiedExtra(item: ExtendableItem): Map[String,String] =
 	{
-			import collection.JavaConverters._			
+			import collection.JavaConverters._
 		item.getQualifiedExtraAttributes.asInstanceOf[java.util.Map[String,String]].asScala.toMap
 	}
 	def filterCustomExtra(item: ExtendableItem, include: Boolean): Map[String,String] =
@@ -124,7 +124,7 @@ object CustomPomParser
 		//  with the extra attributes from the <properties> section
 	def simplify(id: ModuleRevisionId): ModuleRevisionId =
 	{
-			import collection.JavaConverters._			
+			import collection.JavaConverters._
 		ModuleRevisionId.newInstance(id.getOrganisation, id.getName, id.getBranch, id.getRevision, filterCustomExtra(id, include=false).asJava)
 	}
 

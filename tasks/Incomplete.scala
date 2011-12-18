@@ -19,7 +19,7 @@ final case class Incomplete(node: Option[AnyRef], tpe: IValue = Error, message: 
 
 object Incomplete extends Enumeration {
 	val Skipped, Error = Value
-	
+
 	def transformTD(i: Incomplete)(f: Incomplete => Incomplete): Incomplete = transform(i, true)(f)
 	def transformBU(i: Incomplete)(f: Incomplete => Incomplete): Incomplete = transform(i, false)(f)
 	def transform(i: Incomplete, topDown: Boolean)(f: Incomplete => Incomplete): Incomplete =

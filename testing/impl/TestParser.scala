@@ -9,7 +9,7 @@ package sbt
 * definition := isModule? className typeSpecific
 * isModule := '<module>'
 * typeSpecific := annotated | subclass
-* 
+*
 * subclass := subclassSeparator className
 * subclassSeparator := '<<'
 *
@@ -52,7 +52,7 @@ final class DiscoveredParser extends RegexParsers with NotNull
 
 	def isModule: Parser[Boolean] = (IsModuleLiteral?) ^^ (_.isDefined)
 	def className: Parser[String] = ClassNameRegexString.r
-	
+
 	def parse(definitionString: String): Either[String, Discovered] =
 	{
 		def parseError(msg: String) = Left("Could not parse discovered definition '" + definitionString + "': " + msg)

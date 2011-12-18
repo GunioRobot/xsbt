@@ -11,7 +11,7 @@ public interface ApplicationID
 	public String mainClass();
 	public String[] mainComponents();
 	public boolean crossVersioned();
-	
+
 	/** Files to add to the application classpath. */
 	public File[] classpathExtra();
 }

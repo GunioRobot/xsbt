@@ -22,12 +22,12 @@ object LogManager
 	def defaults(extra: ScopedKey[_] => Seq[AbstractLogger]): LogManager  =  withLoggers(extra = extra)
 
 	def defaultScreen: AbstractLogger = ConsoleLogger()
-	
+
 	def defaultBacked(useColor: Boolean = ConsoleLogger.formatEnabled): PrintWriter => ConsoleLogger =
 		to => ConsoleLogger(ConsoleLogger.printWriterOut(to), useColor = useColor) // TODO: should probably filter ANSI codes when useColor=false
 
 	def withScreenLogger(mk: => AbstractLogger): LogManager = withLoggers(mk)
-	
+
 	def withLoggers(screen: => AbstractLogger = defaultScreen, backed: PrintWriter => AbstractLogger = defaultBacked(), extra: ScopedKey[_] => Seq[AbstractLogger] = _ => Nil): LogManager =
 		new LogManager {
 			def apply(data: Settings[Scope], state: State, task: ScopedKey[_], to: PrintWriter): Logger =

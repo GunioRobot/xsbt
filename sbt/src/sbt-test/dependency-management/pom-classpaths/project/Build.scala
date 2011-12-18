@@ -17,7 +17,7 @@ object MyBuild extends Build
 				checkClasspath(conf match {
 					case Provided => p
 					case Compile => c
-					case Test => t 
+					case Test => t
 					case Runtime => r
 				}, names.toSet)
 			}
